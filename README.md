@@ -4,7 +4,8 @@ A bucket for some codes in Python which are written at my free time at home.
 Some of them are from online-lessons, some of them are from my own creations.
 
 # Purpose
-No purpose only for fun.
+No purpose only for fun. Only find that the codes must be saved in somewhere to 
+prevent from losing for some special occasions.
 
 # License
 
