@@ -1,5 +1,7 @@
 #!/usr/bin/python
-
+"""
+Simulate linux standard "free" command on MacOs.
+"""
 import subprocess
 import re
 
