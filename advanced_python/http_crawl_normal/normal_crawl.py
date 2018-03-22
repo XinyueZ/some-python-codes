@@ -1,4 +1,6 @@
 import time
+import requests
+from bs4 import BeautifulSoup
 
 def continue_crawl(recent_url_list, target_url, max_url_list_len = 25):
     """
@@ -31,8 +33,26 @@ print(continue_crawl(["http://g.cn"], "http://g.cn") == False)
 print(continue_crawl(["http://g.cn", "http://www.online.sh.cn"], "http://g.cn") == False)
 print(continue_crawl(["http://g.cn", "http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn"], "http://www.online.sh.ch") == False)
 
+def find_first_link(url):
+    """
+    Get the HTML from "url", use the requests library
+    feed the HTML into Beautiful Soup
+    find the first link in the article
+    
+    return the first link as a string, or return None if there is no link.
+    """
+
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, "html.parser")
+    article_link = soup.find(id = "mw-content-text").find(class_ = "mw-parser-output").p.a.get("href")
+    if article_link: return article_link
+
+print(find_first_link("https://en.wikipedia.org/wiki/A.J.W._McNeilly"))
+
 def web_crawl(wait_sec = 2):
     while continue_crawl(article_chain, target_url):
         first_link = find_first_link(article_chain[-1])
         article_chain.append(first_link)
         time.sleep(wait_sec)
+
+
