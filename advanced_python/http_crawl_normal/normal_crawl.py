@@ -1,4 +1,4 @@
-def continue_crawl(recent_url_list, target_url):
+def continue_crawl(recent_url_list, target_url, max_url_list_len = 25):
     """
     Returns True or False following these rules:
 
@@ -7,9 +7,6 @@ def continue_crawl(recent_url_list, target_url):
     If the list has a cycle in it, the function should return False
     otherwise the search should continue and the function should return True.
     """
-    
-    
-    max_url_list_len = 25
     most_recent = recent_url_list[-1]
     url_list_len = len(recent_url_list)
     url_list_in_set_len = len(set(recent_url_list))
