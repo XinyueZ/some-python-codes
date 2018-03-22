@@ -1,3 +1,5 @@
+import time
+
 def continue_crawl(recent_url_list, target_url, max_url_list_len = 25):
     """
     Returns True or False following these rules:
@@ -28,3 +30,9 @@ print(continue_crawl(["http://g.cn"], "http://sina.com.cn") == True)
 print(continue_crawl(["http://g.cn"], "http://g.cn") == False)
 print(continue_crawl(["http://g.cn", "http://www.online.sh.cn"], "http://g.cn") == False)
 print(continue_crawl(["http://g.cn", "http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn"], "http://www.online.sh.ch") == False)
+
+def web_crawl(wait_sec = 2):
+    while continue_crawl(article_chain, target_url):
+        first_link = find_first_link(article_chain[-1])
+        article_chain.append(first_link)
+        time.sleep(wait_sec)
