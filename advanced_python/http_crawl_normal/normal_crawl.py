@@ -25,14 +25,6 @@ def continue_crawl(recent_url_list, target_url, max_url_list_len = 25):
     return True
 
 
-print(continue_crawl(
-    ['https://en.wikipedia.org/wiki/Floating_point', 'https://en.wikipedia.org/wiki/Computing', 'https://en.wikipedia.org/wiki/Floating_point'],
-    'https://en.wikipedia.org/wiki/Philosophy') == False)
-print(continue_crawl(["http://g.cn"], "http://sina.com.cn") == True)
-print(continue_crawl(["http://g.cn"], "http://g.cn") == False)
-print(continue_crawl(["http://g.cn", "http://www.online.sh.cn"], "http://g.cn") == False)
-print(continue_crawl(["http://g.cn", "http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn"], "http://www.online.sh.ch") == False)
-
 def find_first_link(url):
     """
     Get the HTML from "url", use the requests library
@@ -55,13 +47,21 @@ def find_first_link(url):
             break
     return first_link
 
-print(find_first_link("https://en.wikipedia.org/wiki/A.J.W._McNeilly"))
-print(find_first_link("https://en.wikipedia.org/wiki/Masatoshi_Nakayama"))
-
 def web_crawl(wait_sec = 2):
     while continue_crawl(article_chain, target_url):
         first_link = find_first_link(article_chain[-1])
         article_chain.append(first_link)
         time.sleep(wait_sec)
 
+print("====BEGIN TESTS====")
+print(find_first_link("https://en.wikipedia.org/wiki/A.J.W._McNeilly"))
+print(find_first_link("https://en.wikipedia.org/wiki/Masatoshi_Nakayama"))
+print(continue_crawl(
+    ['https://en.wikipedia.org/wiki/Floating_point', 'https://en.wikipedia.org/wiki/Computing', 'https://en.wikipedia.org/wiki/Floating_point'],
+    'https://en.wikipedia.org/wiki/Philosophy') == False)
+print(continue_crawl(["http://g.cn"], "http://sina.com.cn") == True)
+print(continue_crawl(["http://g.cn"], "http://g.cn") == False)
+print(continue_crawl(["http://g.cn", "http://www.online.sh.cn"], "http://g.cn") == False)
+print(continue_crawl(["http://g.cn", "http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn","http://g.cn"], "http://www.online.sh.ch") == False)
+print("====END TESTS====")
 
