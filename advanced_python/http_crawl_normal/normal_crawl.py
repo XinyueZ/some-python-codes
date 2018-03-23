@@ -41,13 +41,22 @@ def find_first_link(url):
     
     return the first link as a string, or return None if there is no link.
     """
-
+    first_link = None
     res = requests.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
-    article_link = soup.find(id = "mw-content-text").find(class_ = "mw-parser-output").p.a.get("href")
-    if article_link: return article_link
+    content_div = soup.find(id = "mw-content-text").find(class_ = "mw-parser-output")
+    all_p_in_content = content_div.find_all("p", recursive = False)
+    for child_p in all_p_in_content:
+        # a_href = child_p.a # Wrong!, it will fetch nearst <a href>, also a child of other tags.
+        a_href = child_p.find("a", recursive = False) # Best case.
+        # a_href = (child_p.find_all("a", recursive = False))[0] # Not good, find.all returns collection.
+        if a_href:
+            first_link = a_href.get("href")
+            break
+    return first_link
 
 print(find_first_link("https://en.wikipedia.org/wiki/A.J.W._McNeilly"))
+print(find_first_link("https://en.wikipedia.org/wiki/Masatoshi_Nakayama"))
 
 def web_crawl(wait_sec = 2):
     while continue_crawl(article_chain, target_url):
