@@ -7,6 +7,13 @@ Some of them are from online-lessons, some of them are from my own creations.
 No purpose only for fun. Only find that the codes must be saved in somewhere to 
 prevent from losing for some special occasions.
 
+# Spotlight
+
+- [http crawl](https://github.com/XinyueZ/some-python-codes/tree/master/advanced_python/http_crawl)
+	- A small web-crawl tool to crawl first href-link on wikipedia content. 
+		- From a wiki-page to a target page.
+		- Can define max continue if target page can not be reached.
+ 
 # License
 
 ```
