@@ -59,9 +59,11 @@ def web_crawl(start_url, target_url, wait_sec = CRAWL_WAIT):
     article_chain = [start_url]
     while continue_crawl(article_chain, target_url):
         first_link = find_first_link(article_chain[-1], start_url)
-        article_chain.append(first_link)
-        if DEBUG: print("+ {}".format(first_link))
-        time.sleep(wait_sec)
+        if first_link:
+            article_chain.append(first_link)
+            if DEBUG: print("+ {}".format(first_link))
+            time.sleep(wait_sec)
+        else: return "We've reached a page where I cannot find a first-link, abort!"
 
     return article_chain
 
