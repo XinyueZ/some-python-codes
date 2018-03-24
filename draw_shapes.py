@@ -1,3 +1,6 @@
+"""
+Use python turtle draw api to draw some shapes.
+"""
 import turtle
 
 def draw_square():
@@ -12,6 +15,14 @@ def draw_circle():
     drawer.color("yellow")
     drawer.circle(40)
 
+def draw_triangle():
+    paint = turtle.Turtle()
+    paint.color("blue")
+    angle = 120
+    for _ in range(3):
+        paint.right(angle)
+        paint.forward(100)
+
 
 
 def draw_shapes():
@@ -20,6 +31,7 @@ def draw_shapes():
 
     draw_square()
     draw_circle()
+    draw_triangle()
 
     window.exitonclick()
 
