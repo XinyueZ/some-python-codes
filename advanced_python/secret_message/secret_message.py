@@ -1,3 +1,13 @@
+"""
+There a bundle of pictures under "prank". They contains a secret message, but
+the filenames contain some numbers. Because of these numbers in names of the 
+picture-files, the files could be listed in messy arrangement. 
+
+Our task is to remove all numbers in filename and we will see listed files in a 
+ordered arrangement and we will get a secret message.
+"""
+
+
 from os import listdir as list_directories
 from os import rename as file_rename
 from os import getcwd as pwd
