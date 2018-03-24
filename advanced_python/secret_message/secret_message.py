@@ -5,6 +5,11 @@ picture-files, the files could be listed in messy arrangement.
 
 Our task is to remove all numbers in filename and we will see listed files in a 
 ordered arrangement and we will get a secret message.
+
+Warning! After calling "python secret_message.py", it renames filenames under "prank".
+
+Run "git reset --hard HEAD" and "git clean -f -d" to reset the status of changes.
+
 """
 
 
