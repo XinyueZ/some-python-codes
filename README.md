@@ -18,6 +18,7 @@ prevent from losing for some special occasions.
 
 - [profanity content check](https://github.com/XinyueZ/some-python-codes/tree/master/advanced_python/profanity_check)
 	- Use [Google's profanity API](http://www.wdylike.appspot.com/?q=some_content) to check plant text contents.
+		- Edit [message.txt](https://github.com/XinyueZ/some-python-codes/blob/master/advanced_python/profanity_check/message.txt), just give some texts freely.
 		- Find profanity or embarrassing content.
 - [show movie trailer](https://github.com/XinyueZ/some-python-codes/tree/master/advanced_python/movie_trailer_website)
 	- Show a website(opening system browser) on local computer with some film trailers
