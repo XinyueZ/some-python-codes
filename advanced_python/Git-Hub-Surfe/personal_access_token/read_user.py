@@ -2,6 +2,7 @@
 #Use oauth tokens to get user info on github.
 #
 from requests import get as http_get
+from os import listdir as list_directory
 
 DEBUG = True
 target_url = "api.github.com/user"
@@ -32,10 +33,19 @@ def get_info(path):
         return file.read()
 
 
-call_get_user(
-            get_info("username"),
-            get_info("token")
-        )
+USER_NAME_FILE = "username"
+TOKEN_FILE = "token"
+INFO_FILE_LIST = list_directory(".")
+
+if USER_NAME_FILE in INFO_FILE_LIST and TOKEN_FILE in INFO_FILE_LIST:
+    username = get_info(USER_NAME_FILE)
+    token = get_info(TOKEN_FILE)
+    call_get_user(
+            username,
+            token
+    )
+else:
+    print("Check out whether username is specified in file: [./{}] and token in file: [./{}]".format(USER_NAME_FILE, TOKEN_FILE))
 
 
 
