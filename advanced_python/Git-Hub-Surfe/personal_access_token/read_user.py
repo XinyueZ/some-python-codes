@@ -3,7 +3,16 @@
 #
 from requests import get as http_get
 
-target_url = "https://api.github.com/user"
+DEBUG = True
+target_url = "api.github.com/user"
+
+def make_up_url(url, username, token):
+    final_url = "https://{}:{}@{}".format(username.strip(), token.strip(), url.strip())
+    
+    if DEBUG:
+        print("final_url = {}".format(final_url))
+    
+    return final_url
 
 def call_get_user(username, token):
     """
@@ -11,7 +20,7 @@ def call_get_user(username, token):
     See. curl -u username:token https://api.github.com/user
     See. https://developer.github.com/v3/auth/#basic-authentication
     """
-    res = http_get(target_url, auth = (username, token))
+    res = http_get(make_up_url(target_url, username, token))
     print(res.text)
 
 def get_info(path):
@@ -21,6 +30,7 @@ def get_info(path):
     """
     with open(path) as file:
         return file.read()
+
 
 call_get_user(
             get_info("username"),
