@@ -1,6 +1,11 @@
 #
 #Use oauth tokens to get user info on github.
 #
+#Program read "./username", "./token" for user-info.
+#When these files do not exist the program can not run
+#correctly. See lines about 58-71.
+#
+#
 from requests import get as http_get
 from os import listdir as list_directory
 
