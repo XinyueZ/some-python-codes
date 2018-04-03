@@ -32,6 +32,19 @@ def get_info(path):
     with open(path) as file:
         return file.read()
 
+def is_not_abs_blank(str):
+    """
+    To check out whether str is not NONE nor empty nor blank.
+    """
+    if str and str.strip():
+        return True
+    return False
+
+def is_abs_blank(str): 
+    """
+    To check out whether str is NONE or empty or blank.
+    """
+    return not is_not_abs_blank(str)
 
 USER_NAME_FILE = "username"
 TOKEN_FILE = "token"
@@ -40,12 +53,14 @@ INFO_FILE_LIST = list_directory(".")
 if USER_NAME_FILE in INFO_FILE_LIST and TOKEN_FILE in INFO_FILE_LIST:
     username = get_info(USER_NAME_FILE)
     token = get_info(TOKEN_FILE)
-    call_get_user(
+    if is_abs_blank(username):
+        print ("Err:The username is empty or blank.")
+    elif is_abs_blank(token):
+        print ("Err:The token is empty or blank.")
+    else:
+        call_get_user(
             username,
             token
     )
 else:
-    print("Check out whether username is specified in file: [./{}] and token in file: [./{}]".format(USER_NAME_FILE, TOKEN_FILE))
-
-
-
+    print("Err:Check out whether username is specified in file: [./{}] and token in file: [./{}]".format(USER_NAME_FILE, TOKEN_FILE))
