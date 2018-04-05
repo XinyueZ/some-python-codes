@@ -9,6 +9,7 @@ from os import stat
 from os.path import join as path_join
 from os.path import exists as path_exists
 from six.moves.urllib.request import urlretrieve
+from urllib.request import urlopen as open_url
 
 class Downloader:
     def __init__(self, src_url, saved_data_root = "."):
@@ -30,12 +31,19 @@ class Downloader:
         
         self.last_percent = percent
 
-    def download(self, object_name, expected_bytes = None, force_download = False):
+    def get_object_size(self, source_object_fullname):
+        """
+        Get object byte-size.
+        """
+        with open_url(source_object_fullname) as file:
+            return int(file.getheader("Content-Length"))
+
+    def download(self, object_name, force_download = False):
         """
         Verify whether the given object_name is available to download or not.
         Set force_download with True if the download execute although it exists.
         Return None when the object could not be downloaded. After downloading the 
-        byte-size of downloaded object will be checked if expected_bytes is given.
+        byte-size of downloaded object will be checked and verified.
         """
         dest_object_fullname = path_join(self.data_root, object_name)
         if force_download or not path_exists(dest_object_fullname):
@@ -45,18 +53,15 @@ class Downloader:
             urlretrieve(source_object_fullname, dest_object_fullname, reporthook = self.progress)
             print("\n(¶) Finished download.")
 
-            if expected_bytes == None:
-                print("(!) Found {} but is not verified.".format(dest_object_fullname))
+            expected_bytes = self.get_object_size(source_object_fullname)
+            object_stat_info = stat(dest_object_fullname)
+            print("Verifying object: {}.".format(object_name))
+            if object_stat_info.st_size == expected_bytes:
+                print("(✓) Verified.")
                 return dest_object_fullname
             else:
-                object_stat_info = stat(dest_object_fullname)
-                print("Verifying object: {}.".format(object_name))
-                if object_stat_info.st_size == expected_bytes:
-                    print("(✓) Verified.")
-                    return dest_object_fullname
-                else:
-                    print("(✘) Couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
-                    return None
+                print("(✘) Couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
+                return None
         else:
             return dest_object_fullname
 
@@ -67,5 +72,5 @@ class Downloader:
 Download objects
 """
 downloader = Downloader('https://commondatastorage.googleapis.com/books1000/') 
-train_filename = downloader.download('notMNIST_large.tar.gz', 247336696)
-test_filename = downloader.download('notMNIST_small.tar.gz', 8458043)
+train_filename = downloader.download('notMNIST_large.tar.gz', True)
+test_filename = downloader.download('notMNIST_small.tar.gz', True)
