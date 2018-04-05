@@ -1,5 +1,5 @@
 #
-# Util class provide extracting compressed files.
+# Util class Extractor provides extracting compressed objects.
 #
 
 DEBUG = True # Only for tests code below.
