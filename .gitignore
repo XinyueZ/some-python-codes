@@ -2,3 +2,4 @@
 token
 username
 *.tar.gz
+*MNIST*
