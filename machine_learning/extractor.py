@@ -1,24 +1,45 @@
 #
 # Util class provide extracting compressed files.
 #
+
+DEBUG = True # Only for tests code below.
+
+import sys
 from os.path import splitext as split_text
 from os.path import isdir as is_dir
+from os.path import isfile as is_a_file
 from os.path import join
+from tarfile import open as open_compressed_object
 
 class Extractor:
-    def __init__(self, src_object_fullname_list, saved_data_root = "."):
+    def __init__(self, object_fullname_list, saved_data_root = "."):
         """
         Construct the Extractor with collection of objects with fullnames.
         The root directory where all objects would extracted into.
         """
-        pass
+        self.source_fullname_list = object_fullname_list
+        self.data_root = saved_data_root
 
+
+    def __extract_object__(self, source_object_fullname):
+        """
+        Extract all objects. This extractor extract objects focely regardless of existing
+        target.
+        """
+        with open_compressed_object(source_object_fullname) as tar_file:
+            sys.stdout.flush() # Some stackoverflow answers suggest here for before extracting.
+            print("(〠) Extracting: {}, it might take several minutes, please wait.".format(source_object_fullname))
+            tar_file.extractall(self.data_root)
+            print("(¶) Finished")
 
     def extract(self):
-        """
-        Extract all objects.
-        """
-        pass
+        for source_object_fullname in self.source_fullname_list:
+            if not is_a_file(source_object_fullname):
+                print("(!) Warning: Can't find {}.".format(source_object_fullname))
+            else:
+                self.__extract_object__(source_object_fullname)
 
-
-
+if DEBUG:
+    src_list = ["./notMNIST_large.tar.gz", "./notMNIST_small.tar.gz"]
+    extractor = Extractor(src_list)
+    extractor.extract()
