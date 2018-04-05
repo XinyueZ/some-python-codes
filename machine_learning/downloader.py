@@ -22,7 +22,7 @@ class Downloader:
         self.last_percent = None
         self.data_root = saved_data_root
 
-    def progress(self, count, block_size, total_size):
+    def __progress__(self, count, block_size, total_size):
         """
         Report downloading progress.
         """
@@ -32,7 +32,7 @@ class Downloader:
         
         self.last_percent = percent
 
-    def get_object_size(self, source_object_fullname):
+    def __get_object_size__(self, source_object_fullname):
         """
         Get object byte-size.
         """
@@ -51,10 +51,10 @@ class Downloader:
             print("Trying to download: {}.".format(object_name))
             source_object_fullname = self.url + object_name
             print("Source: {}.".format(source_object_fullname))
-            urlretrieve(source_object_fullname, dest_object_fullname, reporthook = self.progress)
+            urlretrieve(source_object_fullname, dest_object_fullname, reporthook = self.__progress__)
             print("\n(¶) Finished download.")
 
-            expected_bytes = self.get_object_size(source_object_fullname)
+            expected_bytes = self.__get_object_size__(source_object_fullname)
             object_stat_info = stat(dest_object_fullname)
             print("Verifying object: {}.".format(object_name))
             if object_stat_info.st_size == expected_bytes:
