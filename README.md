@@ -27,8 +27,8 @@ prevent from losing for some special occasions.
 
 Some of codes might use [Tensorflow](https://www.tensorflow.org/) as advanced sample.
 
-## [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/download_file.py).
-	- run ```python3 download_file.py``` directly for sample call. 
+## [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/downloader.py).
+	- run ```python3 downloader.py``` directly for sample call. 
 
 # License
 
