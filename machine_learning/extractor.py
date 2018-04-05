@@ -23,8 +23,7 @@ class Extractor:
 
     def __extract_object__(self, source_object_fullname):
         """
-        Extract all objects. This extractor extract objects focely regardless of existing
-        target.
+        Extract object with source_object_fullname. This extractor extract object focely regardless of existing target.
         """
         with open_compressed_object(source_object_fullname) as tar_file:
             sys.stdout.flush() # Some stackoverflow answers suggest here for before extracting.
@@ -33,6 +32,9 @@ class Extractor:
             print("(¶) Finished")
 
     def extract(self):
+        """
+        Extract all objects which are pointed by source_fullname_list.
+        """
         for source_object_fullname in self.source_fullname_list:
             if not is_a_file(source_object_fullname):
                 print("(!) Warning: Can't find {}.".format(source_object_fullname))
