@@ -4,6 +4,8 @@
 #
 #
 
+DEBUG = true # Only for tests code below.
+
 import sys
 from os import stat
 from os.path import join as path_join
@@ -68,9 +70,10 @@ class Downloader:
 
 
 
-"""
-Download objects
-"""
-downloader = Downloader('https://commondatastorage.googleapis.com/books1000/') 
-train_filename = downloader.download('notMNIST_large.tar.gz', True)
-test_filename = downloader.download('notMNIST_small.tar.gz', True)
+if DEBUG:
+    """
+    Download objects
+    """
+    downloader = Downloader('https://commondatastorage.googleapis.com/books1000/') 
+    train_filename = downloader.download('notMNIST_large.tar.gz', True)
+    test_filename = downloader.download('notMNIST_small.tar.gz', True)
