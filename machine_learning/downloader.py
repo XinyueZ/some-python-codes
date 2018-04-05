@@ -2,7 +2,6 @@
 # Util class with some download functions which could be used in ML
 # program to fetch remote objects for training.
 #
-#
 
 DEBUG = True # Only for tests code below.
 
