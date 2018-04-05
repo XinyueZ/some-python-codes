@@ -26,11 +26,7 @@ class Downloader:
         """
         percent = int(count * block_size * 100 / total_size)
         if self.last_percent != percent:
-            sys.stdout.write("%s%%" % percent)
-            sys.stdout.flush()
-        else:
-            sys.stdout.write(".")
-            sys.stdout.flush()
+            print("Downloaded: {}%".format(percent), sep=' ',  end = "\r", flush = True)
         
         self.last_percent = percent
 
