@@ -4,7 +4,7 @@
 #
 #
 
-DEBUG = true # Only for tests code below.
+DEBUG = True # Only for tests code below.
 
 import sys
 from os import stat
