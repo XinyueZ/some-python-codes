@@ -21,7 +21,14 @@ prevent from losing for some special occasions.
 		- Edit [message.txt](https://github.com/XinyueZ/some-python-codes/blob/master/advanced_python/profanity_check/message.txt), just give some texts freely.
 		- Find profanity or embarrassing content.
 - [show movie trailer](https://github.com/XinyueZ/some-python-codes/tree/master/advanced_python/movie_trailer_website)
-	- Show a website(opening system browser) on local computer with some film trailers
+	- Show a website(opening system browser) on local computer with some film trailers.
+
+# Machine learning
+
+Some of codes might use [Tensorflow](https://www.tensorflow.org/) as advanced sample.
+
+## [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/download_file.py).
+	- run ```python3 download_file.py``` directly for sample call. 
 
 # License
 
