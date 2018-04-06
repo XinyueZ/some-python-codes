@@ -27,9 +27,9 @@ class Extractor:
         """
         with open_compressed_object(source_object_fullname) as tar_file:
             sys.stdout.flush() # Some stackoverflow answers suggest here for before extracting.
-            print("(〠) Extracting: {}, it might take several minutes, please wait.".format(source_object_fullname))
+            print("► extracting: {}, it might take several minutes, please wait ❄.".format(source_object_fullname))
             tar_file.extractall(self.data_root)
-            print("(¶) Finished")
+            print("☀ finished")
 
     def extract(self):
         """
@@ -37,7 +37,7 @@ class Extractor:
         """
         for source_object_fullname in self.source_fullname_list:
             if not is_a_file(source_object_fullname):
-                print("(!) Warning: Can't find {}.".format(source_object_fullname))
+                print("☠  can't find {}.".format(source_object_fullname))
             else:
                 self.__extract_object__(source_object_fullname)
 
