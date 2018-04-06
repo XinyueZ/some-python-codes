@@ -29,7 +29,7 @@ class Extractor:
             sys.stdout.flush() # Some stackoverflow answers suggest here for before extracting.
             print("► extracting: {}, it might take several minutes, please wait ❄.".format(source_object_fullname))
             tar_file.extractall(self.data_root)
-            print("☀ finished")
+            print("👍  finished")
 
     def extract(self):
         """

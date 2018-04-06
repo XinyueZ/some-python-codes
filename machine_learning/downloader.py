@@ -27,7 +27,7 @@ class Downloader:
         """
         percent = int(count * block_size * 100 / total_size)
         if self.last_percent != percent:
-            print("⤓ {}%".format(percent), sep=' ',  end = "\r", flush = True)
+            print("⏬  {}%".format(percent), sep=' ',  end = "\r", flush = True)
         
         self.last_percent = percent
 
@@ -51,7 +51,7 @@ class Downloader:
             source_object_fullname = self.url + object_name
             print("☁ source: {}.".format(source_object_fullname))
             urlretrieve(source_object_fullname, dest_object_fullname, reporthook = self.__progress__)
-            print("\n☀ finished.")
+            print("\n👍  finished.")
 
             expected_bytes = self.__get_object_size__(source_object_fullname)
             object_stat_info = stat(dest_object_fullname)
