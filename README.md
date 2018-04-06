@@ -23,7 +23,7 @@ prevent from losing for some special occasions.
 - [show movie trailer](https://github.com/XinyueZ/some-python-codes/tree/master/advanced_python/movie_trailer_website)
 	- Show a website(opening system browser) on local computer with some film trailers.
 
-# Machine learning
+# Machine Learning
 
 Introduce a couple of python codes for machine-learning program. They're maybe used in some cases like data-source downloading,  data-source extract, serializing data-set etc. Some of these codes might use [Tensorflow](https://www.tensorflow.org/) as advanced sample.
 
