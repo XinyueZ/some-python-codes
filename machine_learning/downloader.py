@@ -55,12 +55,12 @@ class Downloader:
 
             expected_bytes = self.__get_object_size__(source_object_fullname)
             object_stat_info = stat(dest_object_fullname)
-            print("✄ Verifying: {}.".format(object_name))
+            print("✄ verifying: {}.".format(object_name))
             if object_stat_info.st_size == expected_bytes:
-                print("✅  Verified.")
+                print("✅  verified.")
                 return dest_object_fullname
             else:
-                print("☠  Couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
+                print("☠  couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
                 return None
         else:
             return dest_object_fullname
