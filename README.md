@@ -31,8 +31,10 @@ I keep these code as simple as possible to catch and easy to understand for furt
 
 - [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/downloader.py).
 	- run ```python3 downloader.py``` directly for sample call(Flag DEBUG = True).
-- [Extractor used for extract compressed file](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/extractor.py).
+- [Extractor, used for extract compressed file](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/extractor.py).
 	- run ```python3 extractor.py``` directly for sample call(Flag DEBUG = True).
+- [PickleMaker, used for serializing object, i.e. images, to binary](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/pickle_maker.py)
+	- run ```python3 pickle_maker.py``` directly for sample call(Flag DEBUG = True).
 
 # License
 
