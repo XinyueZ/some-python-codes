@@ -29,10 +29,9 @@ Introduce a couple of python codes for machine-learning program. They're maybe u
 
 I keep these code as simple as possible to catch and easy to understand for furture machine-learning programming(ML), because a lot ML codes, even Hello,World, will *start with downloading, construct data-source to data-set or batch* which is not cheap for newcomer, here give only a buffer step to check out what high-level library like [Tensorflow](https://www.tensorflow.org/) does for general job. Step-By-Step is sometimes powerful key to *Know-How* .  
 
-## [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/downloader.py).
+- [Downloader, used for loading training data](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/downloader.py).
 	- run ```python3 downloader.py``` directly for sample call(Flag DEBUG = True).
- 
-## [Extractor, used for extract compressed file](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/extractor.py).
+- [Extractor used for extract compressed file](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/extractor.py).
 	- run ```python3 extractor.py``` directly for sample call(Flag DEBUG = True).
 
 # License
