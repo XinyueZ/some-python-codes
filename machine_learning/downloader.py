@@ -47,20 +47,20 @@ class Downloader:
         """
         dest_object_fullname = path_join(self.data_root, object_name)
         if force_download or not path_exists(dest_object_fullname):
-            print("Trying to download: {}.".format(object_name))
+            print("► download: {}.".format(object_name))
             source_object_fullname = self.url + object_name
-            print("Source: {}.".format(source_object_fullname))
+            print("☁ source: {}.".format(source_object_fullname))
             urlretrieve(source_object_fullname, dest_object_fullname, reporthook = self.__progress__)
-            print("\n(¶) Finished download.")
+            print("\n◉ finished.")
 
             expected_bytes = self.__get_object_size__(source_object_fullname)
             object_stat_info = stat(dest_object_fullname)
-            print("Verifying object: {}.".format(object_name))
+            print("✄ Verifying: {}.".format(object_name))
             if object_stat_info.st_size == expected_bytes:
-                print("(✓) Verified.")
+                print("✓ Verified.")
                 return dest_object_fullname
             else:
-                print("(✘) Couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
+                print("✘ Couldn't download {} and failed to verify {}.".format(object_name, dest_object_fullname))
                 return None
         else:
             return dest_object_fullname
