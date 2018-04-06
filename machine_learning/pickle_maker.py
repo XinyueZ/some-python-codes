@@ -3,6 +3,8 @@
 # to a collection of 2-D collection, a 3-D collection will be.
 #
 
+DEBUG = True # Test with codes below.
+
 from imageio import imread as read_image
 from numpy import ndarray 
 from numpy import std as standard_deviation
@@ -46,7 +48,7 @@ class PickleMaker:
         __from_object_to_dataset__. 
         Return a 3-D as final result collection, otherwise None.
         """
-        print("► Convert objects from {}.".format(folder_fullname))
+        print("► convert objects from {}.".format(folder_fullname))
         object_fullname_list = directory_list(folder_fullname)
         return_dataset = ndarray(shape = (len(object_fullname_list), self.each_object_size_width, self.each_object_size_height), dtype = np.float32)
         count_converted = 0
@@ -60,9 +62,22 @@ class PickleMaker:
         if count_converted >= self.expected_objects_count:    
             print("✄  filter useful data {}/{}.", count_converted, len(return_dataset))
             return_dataset = return_dataset[:count_converted, :, :] # Optimizing, the init return_dataset can't be used totally, the rest empty will be discared.
-            print("✅  full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
+            print("✔ full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
             return return_dataset
         else:
             print("☠  varlidated data is too less, expected: {}, real: {}",  self.expected_objects_count, count_converted)
             return None
 
+    def make(self):
+        """
+        Make pickle files to persist dataset(arrays).
+        Return list of output fullname.
+        """
+        output_fullname_list = []
+        for folder_fullname in self.folder_with_objects_fullname_list:
+             output_fullname = "{}.pickle".format(folder_fullname)
+             output_fullname_list.append(output_fullname)
+             dataset = self.__convert_objects_to_dataset__(folder_fullname)
+             if dataset != None:
+                 with open(output_fullname, "wb") as write_file:
+                     pickle.dump(dataset, write_file, pickle.HIGHEST_PROTOCOL)
