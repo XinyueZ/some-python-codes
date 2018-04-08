@@ -56,9 +56,9 @@ class PickleMaker:
         
         It'll save these 2-Ds to a 3-D collection which contains
 
-        row: count of object, 
-        x: count of pixel of object horizontal, 
-        y: count of pixel object vertical. 
+        row: count of objects, 
+        x: count of pixel of a object in  horizontal(width), 
+        y: count of pixel of a object in vertical(height). 
         
         Return a 3-D as final result collection, otherwise None, False.
         """
