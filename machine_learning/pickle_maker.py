@@ -53,6 +53,13 @@ class PickleMaker:
         """
         Loop objects under folder_fullname and transfer them to 2-D with
         __from_object_to_dataset__. 
+        
+        It'll save these 2-Ds to a 3-D collection which contains
+
+        row: count of object, 
+        x: count of pixel of object horizontal, 
+        y: count of pixel object vertical. 
+        
         Return a 3-D as final result collection, otherwise None, False.
         """
         print("► convert objects from {}.".format(folder_fullname))
@@ -68,7 +75,7 @@ class PickleMaker:
     
         if count_converted >= self.expected_objects_count:    
             print("✄  filter useful data {}/{}.".format(count_converted, len(return_dataset)))
-            return_dataset = return_dataset[:count_converted, :, :] # Optimizing, the init return_dataset can't be used totally, the rest empty will be discared.
+            return_dataset = return_dataset[:count_converted, :, :] # Optimizing, the return_dataset can't be used totally, the rest empty will be discared.
             print("✅  full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
             return return_dataset, True
         else:
