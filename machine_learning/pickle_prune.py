@@ -12,6 +12,7 @@ from os.path import isdir as is_dir
 from os.path import splitext as split_text
 from os import listdir as directory_list
 from os.path import join as path_join
+from os import stat as stat_info
 from six.moves import cPickle as pickle
 
 class PicklePrune:
@@ -95,6 +96,7 @@ class PicklePrune:
             train_dataset, train_labels = self.__randomize__(train_dataset, train_labels)
             if valid_dataset is not None:
                 valid_dataset, valid_labels = self.__randomize__(valid_dataset, valid_labels)
+
         return train_dataset, train_labels, valid_dataset, valid_labels
 
 def test(src_root):
@@ -135,3 +137,22 @@ if DEBUG:
     print('Training:', train_dataset.shape, train_labels.shape)
     print('Validation:', valid_dataset.shape, valid_labels.shape)
     print('Testing:', test_dataset.shape, test_labels.shape)
+
+    print("save---->")
+    save_pickle = path_join(".", "notMNIST.pickle")
+    try:
+        with open(save_pickle, "wb") as f:
+            save = {
+                    "train_dataset": train_dataset,
+                    "train_labels": train_labels,
+                    "valid_dataset": valid_dataset,
+                    "valid_labels": valid_labels,
+                    "test_dataset": test_dataset,
+                    "test_labels": test_labels 
+                }
+            pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
+    except Exception as e:
+        print("Unable to read {}: {}".format(pickle_file,  e))
+        raise
+    info = stat_info(save_pickle)
+    print("Compressed pickle size: {}".format(info.st_size))
