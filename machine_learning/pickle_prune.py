@@ -99,6 +99,16 @@ class PicklePrune:
 
         return train_dataset, train_labels, valid_dataset, valid_labels
 
+    def save_pickle(self, pickle_fullname, data_to_save):
+        try:
+            with open(pickle_fullname, "wb") as f:
+                pickle.dump(data_to_save, f, pickle.HIGHEST_PROTOCOL)
+                return f
+        except Exception as e:
+            print("Unable to read {}: {}".format(pickle_fullname,  e))
+            raise
+
+
 def test(src_root):
     """
     Return list of "xxx.pickle" under src_root.
@@ -140,19 +150,14 @@ if DEBUG:
 
     print("save---->")
     save_pickle = path_join(".", "notMNIST.pickle")
-    try:
-        with open(save_pickle, "wb") as f:
-            save = {
-                    "train_dataset": train_dataset,
-                    "train_labels": train_labels,
-                    "valid_dataset": valid_dataset,
-                    "valid_labels": valid_labels,
-                    "test_dataset": test_dataset,
-                    "test_labels": test_labels 
-                }
-            pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
-    except Exception as e:
-        print("Unable to read {}: {}".format(pickle_file,  e))
-        raise
+    data_to_save = {
+            "train_dataset": train_dataset,
+            "train_labels": train_labels,
+            "valid_dataset": valid_dataset,
+            "valid_labels": valid_labels,
+            "test_dataset": test_dataset,
+            "test_labels": test_labels
+        }
+    pickle_prune.save_pickle(save_pickle, data_to_save)
     info = stat_info(save_pickle)
     print("Compressed pickle size: {}".format(info.st_size))
