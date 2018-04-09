@@ -115,6 +115,7 @@ def test(src_root, expected_count):
     for input_data_name in li:
         input_objects.append(path_join(src_root, input_data_name))
         
+    # input_objects contains: "src_root/A", "src_root/B".....
     maker = PickleMaker(input_objects, expected_count)
     maker.make()
 
