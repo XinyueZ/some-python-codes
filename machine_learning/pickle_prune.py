@@ -7,6 +7,7 @@ DEBUG = True
 import numpy as np
 from numpy import ndarray 
 from numpy.random import shuffle as shuffle_all
+from numpy.random import permutation as shuffle_all_and_copy
 from os.path import isdir as is_dir
 from os.path import splitext as split_text
 from os import listdir as directory_list
@@ -36,11 +37,17 @@ class PicklePrune:
         else:
             return None, None
 
-    def prune(self):
+    def __randomize__(self, dataset, labels):
+        """
+        Shuffles dataset and lables and returns copy of them.
+        """
+        permutation = shuffle_all_and_copy(labels.shape[0])
+        return dataset[permutation, :, :], labels[permutation]
+
+    def prune(self, randomize = False):
         """
         Prune ".pickle" to memory. It will revert data in .pickle(see pickle.maker.py).
         """
-
         # Here is how many objects will be predicated in the furture.
         count_classes = len(self.pickle_fullname_list)
 
@@ -84,6 +91,10 @@ class PicklePrune:
                 print('Unable to read {} : {}'.format(pickle_file,  e))
                 raise
 
+        if randomize:
+            train_dataset, train_labels = self.__randomize__(train_dataset, train_labels)
+            if valid_dataset is not None:
+                valid_dataset, valid_labels = self.__randomize__(valid_dataset, valid_labels)
         return train_dataset, train_labels, valid_dataset, valid_labels
 
 def test(src_root):
@@ -111,6 +122,16 @@ if DEBUG:
     pickle_prune = PicklePrune(test_data, 10000)
     test_dataset, test_labels, _, _  =  pickle_prune.prune()
 
+    print('Training:', train_dataset.shape, train_labels.shape)
+    print('Validation:', valid_dataset.shape, valid_labels.shape)
+    print('Testing:', test_dataset.shape, test_labels.shape)
+    print("randomize---->")
+    test_data = test("./notMNIST_large")
+    pickle_prune = PicklePrune(test_data, 200000, 10000)
+    train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune(True)
+    test_data = test("./notMNIST_small")
+    pickle_prune = PicklePrune(test_data, 10000)
+    test_dataset, test_labels, _, _  =  pickle_prune.prune(True)
     print('Training:', train_dataset.shape, train_labels.shape)
     print('Validation:', valid_dataset.shape, valid_labels.shape)
     print('Testing:', test_dataset.shape, test_labels.shape)
