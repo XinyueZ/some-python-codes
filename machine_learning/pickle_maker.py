@@ -108,6 +108,8 @@ def test(src_root, expected_count):
     """
     src_root contains all prepared objects under their folders.
     expected_count for expect output after convert.
+    
+    Return list of class directories like "src_root/A", "src_root/B".....
     """
     li = directory_list(src_root)
     input_objects = []
