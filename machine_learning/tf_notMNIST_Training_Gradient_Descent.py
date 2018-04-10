@@ -8,6 +8,7 @@ from tensorflow import constant
 from tensorflow import matmul
 from tensorflow import reduce_mean
 from tensorflow import global_variables_initializer
+from training_helper import TrainingHelper
 
 class TF_notMNIST_Training_Gradient_Descent:
         def __init__(self, each_object_size_width = 28, each_object_size_height = 28, train_batch = 1000, train_steps = 801, train_learning_rate = 0.5):
@@ -19,6 +20,7 @@ class TF_notMNIST_Training_Gradient_Descent:
             self.train_batch = train_batch
             self.train_steps = train_steps
             self.train_learning_rate = train_learning_rate
+            self.__accuracy__ = TrainingHelper().accuracy
 
         def __activation__(self, tf_dataset, weights, biases):
             """
@@ -30,9 +32,6 @@ class TF_notMNIST_Training_Gradient_Descent:
             loss = reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=tf_train_labels, logits = activation))
             optimizer = tf.train.GradientDescentOptimizer(self.train_learning_rate).minimize(loss)
             return loss, optimizer
-
-        def __accuracy__(self, predictions, labels):
-            return (100.0 * np.sum(np.argmax(predictions, 1) == np.argmax(labels, 1)) / predictions.shape[0])
 
         def start_with(self, train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels, count_classes):
             """
@@ -81,5 +80,13 @@ class TF_notMNIST_Training_Gradient_Descent:
                             self.__accuracy__(predication_for_valid.eval(), valid_labels)
                         )
                         , sep=' ',  end = "\r", flush = True) 
-                print("\n")
-                print('\n👍 Test accuracy: %.1f%%' % self.__accuracy__(predication_for_test.eval(), test_labels))
+
+                _, ls, predications = sess.run([optimizer, loss, predication_for_train])
+                print("👍 Final loss at step {}: {}, Training accuracy: {}%, Validation accuracy: {}%"
+                        .format(
+                            step, 
+                            ls, 
+                            self.__accuracy__(predications, train_labels[:self.train_batch, :]),  
+                            self.__accuracy__(predication_for_valid.eval(), valid_labels)
+                        )) 
+                print('Test accuracy: %.1f%%' % self.__accuracy__(predication_for_test.eval(), test_labels))

@@ -34,3 +34,6 @@ class TrainingHelper:
         ds = dataset.reshape((-1, self.each_object_size_width * self.each_object_size_height)).astype(np.float32)
         lb = (arange(count_classes) == labels[:,None]).astype(np.float32)
         return ds, lb
+
+    def accuracy(self, predictions, labels):
+        return (100.0 * np.sum(np.argmax(predictions, 1) == np.argmax(labels, 1)) / predictions.shape[0])

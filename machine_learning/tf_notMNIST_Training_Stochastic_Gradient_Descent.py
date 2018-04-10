@@ -9,6 +9,7 @@ from tensorflow import placeholder
 from tensorflow import matmul
 from tensorflow import reduce_mean
 from tensorflow import global_variables_initializer
+from training_helper import TrainingHelper
 
 class TF_notMNIST_Training_Stochastic_Gradient_Descent:
         def __init__(self, each_object_size_width = 28, each_object_size_height = 28, train_batch = 1000, train_steps = 10000, train_learning_rate = 0.5):
@@ -20,6 +21,7 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
             self.train_batch = train_batch
             self.train_steps = train_steps
             self.train_learning_rate = train_learning_rate
+            self.__accuracy__ = TrainingHelper().accuracy
 
         def __activation__(self, x, weights, biases):
             """
@@ -31,9 +33,6 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
             loss = reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits = activation))
             optimizer = tf.train.GradientDescentOptimizer(self.train_learning_rate).minimize(loss)
             return loss, optimizer
-
-        def __accuracy__(self, predictions, labels):
-            return (100.0 * np.sum(np.argmax(predictions, 1) == np.argmax(labels, 1)) / predictions.shape[0])
 
         def start_with(self, train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels, count_classes, data_batch_size = 130):
             """
@@ -98,5 +97,21 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                             self.__accuracy__(predication_for_valid.eval(), valid_labels)
                         )
                         , sep=' ',  end = "\r", flush = True) 
-                print("\n")
-                print('\n👍 Test accuracy: %.1f%%' % self.__accuracy__(predication_for_test.eval(), test_labels))
+
+                offset = (step * data_batch_size) % (train_labels.shape[0] - data_batch_size)
+                batch_dataset = train_dataset[offset:(offset + data_batch_size), :]
+                batch_labels = train_labels[offset:(offset + data_batch_size), :]
+                _, ls, predications = sess.run(
+                        [optimizer, loss, predication_for_train], 
+                        feed_dict = {
+                            tf_train_dataset: batch_dataset,
+                            tf_train_labels: batch_labels
+                        })
+                print("👍 Final batch with loss at step {}: {}, accuracy: {}%, validation accuracy: {}%"
+                        .format(
+                            step, 
+                            ls, 
+                            self.__accuracy__(predications, batch_labels),  
+                            self.__accuracy__(predication_for_valid.eval(), valid_labels)
+                        )) 
+                print('Test accuracy: %.1f%%' % self.__accuracy__(predication_for_test.eval(), test_labels))
