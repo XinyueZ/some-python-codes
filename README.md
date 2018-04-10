@@ -38,6 +38,10 @@ I keep these code as simple as possible to catch and easy to understand for furt
 
 
 ## Build Neural Network
+A prediction about alphabet classification from
+A to J. Official sample let begginers in sleep, this sample is easy.
+
+ 
 
 - [Multinomial logistic regression using simple gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Gradient_Descent.py).
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).
