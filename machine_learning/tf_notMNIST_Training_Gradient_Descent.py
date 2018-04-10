@@ -39,15 +39,11 @@ class TF_notMNIST_Training_Gradient_Descent:
             """
             Start multinomial logistic regression using simple gradient descent.
             """
-
-            #
-            # Changable values while training
-            #
-            tf_train_dataset = constant(train_dataset[:self.train_batch, :])
-            tf_train_labels = constant(train_labels[:self.train_batch])
             #
             # Fixed values while training
             #
+            tf_train_dataset = constant(train_dataset[:self.train_batch, :])
+            tf_train_labels = constant(train_labels[:self.train_batch])
             tf_valid_dataset = constant(valid_dataset)
             tf_test_dataset = constant(test_dataset) 
 
