@@ -29,9 +29,9 @@ class Extractor:
             sys.stdout.flush() # Some stackoverflow answers suggest here for before extracting.
             print("► extracting: {}, it might take several minutes, please wait ❄.".format(source_object_fullname))
             tar_file.extractall(self.data_root)
-            print("👍  finished")
+            print("👍 finished")
 
-    def extract(self):
+    def extract(self, force = False):
         """
         Extract all objects which are pointed by source_fullname_list.
         """
@@ -39,9 +39,17 @@ class Extractor:
             if not is_a_file(source_object_fullname):
                 print("☠  can't find {}.".format(source_object_fullname))
             else:
-                self.__extract_object__(source_object_fullname)
+                extracted_dir = split_text(split_text(source_object_fullname)[0])[0]
+                if not force and is_dir(extracted_dir):
+                    print("👍 {} already existed.".format(extracted_dir))   
+                else:
+                    self.__extract_object__(source_object_fullname)
 
-if DEBUG:
-    src_list = ["./notMNIST_large.tar.gz", "./notMNIST_small.tar.gz"]
-    extractor = Extractor(src_list)
-    extractor.extract()
+
+ 
+"""
+Extract objects
+"""
+src_list = ["./notMNIST_large.tar.gz", "./notMNIST_small.tar.gz"]
+extractor = Extractor(src_list)
+extractor.extract()

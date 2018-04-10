@@ -3,14 +3,13 @@
 # to a collection of 2-D collection, a 3-D collection will be.
 #
 
-DEBUG = False # Test with codes below.
-
 from imageio import imread as read_image
 import numpy as np
 from numpy import ndarray 
 from numpy import std as standard_deviation
 from numpy import mean as dataset_mean
 from os.path import isdir as is_dir
+from os.path import isfile as is_a_file
 from os import listdir as directory_list
 from os.path import join as path_join
 from six.moves import cPickle as pickle
@@ -43,10 +42,10 @@ class PickleMaker:
                 print("✄ {}".format(object_fullname), sep=' ',  end = "\r", flush = True)
                 return dataset, True
             else:
-                print("☠  {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
+                print("☠ {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
                 return None, False
         except (IOError, ValueError) as ex:
-                print("☠  {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
+                print("☠ {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
                 return None, False
 
     def __convert_objects_to_dataset__(self, folder_fullname):
@@ -74,15 +73,15 @@ class PickleMaker:
                 count_converted += 1
     
         if count_converted >= self.expected_objects_count:    
-            print("✄  filter useful data {}/{}.".format(count_converted, len(return_dataset)))
+            print("✄ filter useful data {}/{}.".format(count_converted, len(return_dataset)))
             return_dataset = return_dataset[:count_converted, :, :] # Optimizing, the return_dataset can't be used totally, the rest empty will be discared.
-            print("✅  full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
+            print("✅ full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
             return return_dataset, True
         else:
             print("☠  varlidated data is too less, expected: {}, real: {}",  self.expected_objects_count, count_converted)
             return None, False
 
-    def make(self):
+    def make(self, force = False):
         """
         Make pickle files to persist dataset(arrays) from objects under folder_with_objects_fullname_list.
         Return list of output fullname.
@@ -92,19 +91,29 @@ class PickleMaker:
              if is_dir(folder_fullname):
                 output_fullname = "{}.pickle".format(folder_fullname)
                 output_fullname_list.append(output_fullname)
-                dataset, res = self.__convert_objects_to_dataset__(folder_fullname)
-                if res:
-                    try:
-                        with open(output_fullname, "wb") as write_file:
-                            print("► convert from {} to {}".format(folder_fullname, output_fullname))
-                            pickle.dump(dataset, write_file, pickle.HIGHEST_PROTOCOL)
-                            print("👍  finished.")
-                    except Exception as ex:
-                        print("☠  error while saving data to {}\ncased by: \n\n{}".format(output_fullname, ex))
+                if is_a_file(output_fullname) and not force:
+                    print("👍 {} already existed.".format(output_fullname)) 
+                else:
+                    dataset, res = self.__convert_objects_to_dataset__(folder_fullname)
+                    if res:
+                        try:
+                            with open(output_fullname, "wb") as write_file:
+                                print("► convert from {} to {}".format(folder_fullname, output_fullname))
+                                pickle.dump(dataset, write_file, pickle.HIGHEST_PROTOCOL)
+                                print("👍 finished.")
+                        except Exception as ex:
+                            print("☠ error while saving data to {}\ncased by: \n\n{}".format(output_fullname, ex))
 
         return output_fullname_list
 
-def test(src_root, expected_count):
+
+ 
+"""
+Compress all to pickles
+"""
+
+
+def compress_original_classes_to_pickle(src_root, expected_count):
     """
     src_root contains all prepared objects under their folders.
     expected_count for expect output after convert.
@@ -121,7 +130,7 @@ def test(src_root, expected_count):
     maker = PickleMaker(input_objects, expected_count)
     maker.make()
 
-if DEBUG: 
-    test("./notMNIST_large", 45000)
-    test("./notMNIST_small", 1800)
+
+compress_original_classes_to_pickle("./notMNIST_large", 45000)
+compress_original_classes_to_pickle("./notMNIST_small", 1800)
 

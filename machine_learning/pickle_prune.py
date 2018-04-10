@@ -2,8 +2,6 @@
 # Util class for prune pickle results.
 #
 
-DEBUG = False
-
 import numpy as np
 from numpy import ndarray 
 from numpy.random import shuffle as shuffle_all
@@ -109,7 +107,14 @@ class PicklePrune:
             raise
 
 
-def test(src_root):
+ 
+"""
+Make a summary pickle to total.pickle
+"""
+
+
+
+def get_prune_pickles(src_root):
     """
     Return list of "xxx.pickle" under src_root.
     """
@@ -125,39 +130,45 @@ def test(src_root):
 
     return input_objects
 
-if DEBUG:
-    test_data = test("./notMNIST_large")
-    pickle_prune = PicklePrune(test_data, 200000, 10000)
-    train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune()
 
-    test_data = test("./notMNIST_small")
-    pickle_prune = PicklePrune(test_data, 10000)
-    test_dataset, test_labels, _, _  =  pickle_prune.prune()
 
-    print('Training:', train_dataset.shape, train_labels.shape)
-    print('Validation:', valid_dataset.shape, valid_labels.shape)
-    print('Testing:', test_dataset.shape, test_labels.shape)
-    print("randomize---->")
-    test_data = test("./notMNIST_large")
-    pickle_prune = PicklePrune(test_data, 200000, 10000)
-    train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune(True)
-    test_data = test("./notMNIST_small")
-    pickle_prune = PicklePrune(test_data, 10000)
-    test_dataset, test_labels, _, _  =  pickle_prune.prune(True)
-    print('Training:', train_dataset.shape, train_labels.shape)
-    print('Validation:', valid_dataset.shape, valid_labels.shape)
-    print('Testing:', test_dataset.shape, test_labels.shape)
+print("► try classes with pickles")
 
-    print("save---->")
-    save_pickle = path_join(".", "notMNIST.pickle")
-    data_to_save = {
-            "train_dataset": train_dataset,
-            "train_labels": train_labels,
-            "valid_dataset": valid_dataset,
-            "valid_labels": valid_labels,
-            "test_dataset": test_dataset,
-            "test_labels": test_labels
-        }
-    pickle_prune.save_pickle(save_pickle, data_to_save)
-    info = stat_info(save_pickle)
-    print("Compressed pickle size: {}".format(info.st_size))
+prune_pickles = get_prune_pickles("./notMNIST_large")
+pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
+train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune()
+
+prune_pickles = get_prune_pickles("./notMNIST_small")
+pickle_prune = PicklePrune(prune_pickles, 10000)
+test_dataset, test_labels, _, _  =  pickle_prune.prune()
+
+print('Training:', train_dataset.shape, train_labels.shape)
+print('Validation:', valid_dataset.shape, valid_labels.shape)
+print('Testing:', test_dataset.shape, test_labels.shape)
+
+print("► randomize")
+prune_pickles = get_prune_pickles("./notMNIST_large")
+pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
+train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune(True)
+
+prune_pickles = get_prune_pickles("./notMNIST_small")
+pickle_prune = PicklePrune(prune_pickles, 10000)
+test_dataset, test_labels, _, _  =  pickle_prune.prune(True)
+
+print('Training:', train_dataset.shape, train_labels.shape)
+print('Validation:', valid_dataset.shape, valid_labels.shape)
+print('Testing:', test_dataset.shape, test_labels.shape)
+
+print("► save total.pickle")
+save_pickle = path_join(".", "totals.pickle")
+data_to_save = {
+        "train_dataset": train_dataset,
+        "train_labels": train_labels,
+        "valid_dataset": valid_dataset,
+        "valid_labels": valid_labels,
+        "test_dataset": test_dataset,
+        "test_labels": test_labels
+    }
+pickle_prune.save_pickle(save_pickle, data_to_save)
+info = stat_info(save_pickle)
+print("👍 compressed pickle size: {}".format(info.st_size))
