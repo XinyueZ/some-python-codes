@@ -5,7 +5,6 @@ import numpy as np
 import tensorflow as tf 
 from tensorflow import Variable
 from tensorflow import constant
-from tensorflow import placeholder
 from tensorflow import matmul
 from tensorflow import reduce_mean
 from tensorflow import global_variables_initializer
