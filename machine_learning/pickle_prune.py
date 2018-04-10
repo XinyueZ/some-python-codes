@@ -76,12 +76,12 @@ class PicklePrune:
                     objects_set = pickle.load(in_file)
                     shuffle_all(objects_set)
 
-                    train_dataset[start_train:end_train, :, :] = objects_set[valid_batch_each_class:end_train_plus_valid, :, :]
+                    train_dataset[start_train:end_train, :, :] = objects_set[valid_batch_each_class:end_train_plus_valid, :, :] # TODO Need discuss ...
                     train_labels[start_train:end_train] = label
                     start_train += train_batch_each_class
                     end_train += train_batch_each_class
 
-                    if valid_dataset is not None: # Notic: If self.valid_size is 0, here is None for valid_dataset.
+                    if valid_dataset is not None: # Notice: If self.valid_size is 0, here is None for valid_dataset.
                         valid_dataset[start_valid:end_valid, :, :] = objects_set[:valid_batch_each_class, :, :]
                         valid_labels[start_valid:end_valid] = label
                         # start position moves with gap of batch. 0 ->
