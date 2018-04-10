@@ -1,5 +1,7 @@
+__pycache__
 .DS_Store
 token
 username
 *.tar.gz
 *MNIST*
+.vs*

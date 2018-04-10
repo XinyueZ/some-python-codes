@@ -3,7 +3,7 @@
 # to a collection of 2-D collection, a 3-D collection will be.
 #
 
-DEBUG = True # Test with codes below.
+DEBUG = False # Test with codes below.
 
 from imageio import imread as read_image
 import numpy as np

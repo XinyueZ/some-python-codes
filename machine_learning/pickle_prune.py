@@ -2,7 +2,7 @@
 # Util class for prune pickle results.
 #
 
-DEBUG = True
+DEBUG = False
 
 import numpy as np
 from numpy import ndarray 
