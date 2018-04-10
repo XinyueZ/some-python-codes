@@ -2,7 +2,7 @@
 # Util class Extractor provides extracting compressed objects.
 #
 
-DEBUG = True # Only for tests code below.
+DEBUG = False # Only for tests code below.
 
 import sys
 from os.path import splitext as split_text
