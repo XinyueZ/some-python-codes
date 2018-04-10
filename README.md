@@ -33,7 +33,7 @@ I keep these code as simple as possible to catch and easy to understand for furt
 - [Extractor, used for extract compressed file](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/extractor.py).
 - [PickleMaker, used for serializing object, i.e. from images to binary](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/pickle_maker.py).
 - [PicklePrune, used for deserializing object, i.e. from binary to image](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/pickle_prune.py).
-- [PicklePrune, used for deserializing object, i.e. from binary to image](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/pickle_prune.py).
+
 
 ## Build Neural Network
 
