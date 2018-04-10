@@ -14,6 +14,7 @@ from os.path import join as path_join
 from os import stat as stat_info
 from six.moves import cPickle as pickle
 
+
 class PicklePrune:
     def __init__(self, pickle_fullname_list, train_size, valid_size = 0, each_object_size_width = 28, each_object_size_height = 28):
         """
@@ -97,27 +98,6 @@ class PicklePrune:
                 valid_dataset, valid_labels = self.__randomize__(valid_dataset, valid_labels)
 
         return train_dataset, train_labels, valid_dataset, valid_labels
-
-    def save_pickle(self, pickle_fullname, data_to_save):
-        """
-        Save data_to_save to a pickle.
-        """
-        try:
-            with open(pickle_fullname, "wb") as f:
-                pickle.dump(data_to_save, f, pickle.HIGHEST_PROTOCOL)
-                return f
-        except Exception as e:
-            print("Unable to read {}: {}".format(pickle_fullname,  e))
-            raise
-
-    def flat_dataset_labels(self, dataset, labels, count_classes):
-        """
-        Flat dataset, labels to 2-D arrays.
-        """
-        ds = dataset.reshape((-1, self.each_object_size_width * self.each_object_size_height)).astype(np.float32)
-        lb = (arange(count_classes) == labels[:,None]).astype(np.float32)
-        return ds, lb
-
     
 
 """
@@ -170,7 +150,11 @@ print('Training:', train_dataset.shape, train_labels.shape)
 print('Validation:', valid_dataset.shape, valid_labels.shape)
 print('Testing:', test_dataset.shape, test_labels.shape)
 
+
+from  training_helper import TrainingHelper
+
 print("► save total.pickle.")
+training_helper = TrainingHelper()
 save_pickle = path_join(".", "totals.pickle")
 data_to_save = {
         "train_dataset": train_dataset,
@@ -180,15 +164,17 @@ data_to_save = {
         "test_dataset": test_dataset,
         "test_labels": test_labels
     }
-pickle_prune.save_pickle(save_pickle, data_to_save)
+training_helper.save_pickle(save_pickle, data_to_save)
 info = stat_info(save_pickle)
 print("👍 compressed pickle size: {}".format(info.st_size))
 
+# TODO Read totals.pickle to reconstruct all datasets and labels for next steps.
+# For evaluation, use all from memory directly.
 
 print("► reformat total.pickle.")
-train_dataset, train_labels = pickle_prune.flat_dataset_labels(train_dataset, train_labels, 10)
-valid_dataset, valid_labels = pickle_prune.flat_dataset_labels(valid_dataset, valid_labels, 10)
-test_dataset, test_labels = pickle_prune.flat_dataset_labels(test_dataset, test_labels, 10)
+train_dataset, train_labels = training_helper.flat_dataset_labels(train_dataset, train_labels, 10)
+valid_dataset, valid_labels = training_helper.flat_dataset_labels(valid_dataset, valid_labels, 10)
+test_dataset, test_labels = training_helper.flat_dataset_labels(test_dataset, test_labels, 10)
 
 print("👍 ")
 print('Training:', train_dataset.shape, train_labels.shape)
