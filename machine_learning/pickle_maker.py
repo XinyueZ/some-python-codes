@@ -34,7 +34,7 @@ class PickleMaker:
         Return None, False when some errors.
         """
         try:
-            print("► convert {}.".format(object_fullname), sep=' ',  end = "\r", flush = True)
+            print("► convert {} to pickle.".format(object_fullname), sep=' ',  end = "\r", flush = True)
             dataset = (read_image(object_fullname).astype(float) - self.pixel_depth / 2) / self.pixel_depth
             # Only the object with size-width-height equals to what we expected should
             # be as dataset to be persistented lately.
@@ -111,8 +111,6 @@ class PickleMaker:
 """
 Compress all to pickles
 """
-
-
 def compress_original_classes_to_pickle(src_root, expected_count):
     """
     src_root contains all prepared objects under their folders.
