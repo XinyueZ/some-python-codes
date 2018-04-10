@@ -5,11 +5,12 @@
 DEBUG = False # Only for tests code below.
 
 import sys
-from os.path import splitext as split_text
 from os.path import isdir as is_dir
 from os.path import isfile as is_a_file
+from os.path import splitext as split_text
 from os.path import join
 from tarfile import open as open_compressed_object
+
 
 class Extractor:
     def __init__(self, object_fullname_list, saved_data_root = "."):

@@ -2,17 +2,19 @@
 # Util class for prune pickle results.
 #
 
-import numpy as np
-from numpy import ndarray 
-from numpy import arange
-from numpy.random import shuffle as shuffle_all
-from numpy.random import permutation as shuffle_all_and_copy
-from os.path import isdir as is_dir
-from os.path import splitext as split_text
 from os import listdir as directory_list
-from os.path import join as path_join
 from os import stat as stat_info
+from os.path import isdir as is_dir
+from os.path import join as path_join
+from os.path import splitext as split_text
+
+import numpy as np
+from numpy import arange, ndarray
+from numpy.random import permutation as shuffle_all_and_copy
+from numpy.random import shuffle as shuffle_all
+
 from six.moves import cPickle as pickle
+from training_helper import TrainingHelper
 
 
 class PicklePrune:
@@ -151,7 +153,6 @@ print('Validation:', valid_dataset.shape, valid_labels.shape)
 print('Testing:', test_dataset.shape, test_labels.shape)
 
 
-from  training_helper import TrainingHelper
 
 print("► save total.pickle.")
 training_helper = TrainingHelper()

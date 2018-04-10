@@ -2,13 +2,12 @@
 # Run NN, multinomial logistic regression using simple gradient descent.
 #
 import numpy as np
-import tensorflow as tf 
-from tensorflow import Variable
-from tensorflow import constant
-from tensorflow import matmul
-from tensorflow import reduce_mean
-from tensorflow import global_variables_initializer
+import tensorflow as tf
+from tensorflow import (Variable, constant, global_variables_initializer,
+                        matmul, reduce_mean, truncated_normal, zeros)
+
 from training_helper import TrainingHelper
+
 
 class TF_notMNIST_Training_Gradient_Descent:
         def __init__(self, each_object_size_width = 28, each_object_size_height = 28, train_batch = 1000, train_steps = 801, train_learning_rate = 0.5):
@@ -26,7 +25,7 @@ class TF_notMNIST_Training_Gradient_Descent:
             """
             Define math computation, the logits.
             """
-            return tf.matmul(tf_dataset, weights) + biases
+            return matmul(tf_dataset, weights) + biases
 
         def __loss__optimizer__(self, tf_train_labels, activation):
             loss = reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=tf_train_labels, logits = activation))
@@ -49,8 +48,8 @@ class TF_notMNIST_Training_Gradient_Descent:
             # Variables should be trained
             # Classical weight and biases
             #
-            tf_weight = Variable(tf.truncated_normal([self.each_object_size_width * self.each_object_size_height, count_classes]))
-            tf_biases = Variable(tf.zeros([count_classes]))     
+            tf_weight = Variable(truncated_normal([self.each_object_size_width * self.each_object_size_height, count_classes]))
+            tf_biases = Variable(zeros([count_classes]))     
 
             logits = self.__activation__(tf_train_dataset, tf_weight, tf_biases)
             loss, optimizer = self.__loss__optimizer__(tf_train_labels, logits)

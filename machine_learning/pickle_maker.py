@@ -3,16 +3,19 @@
 # to a collection of 2-D collection, a 3-D collection will be.
 #
 
-from imageio import imread as read_image
-import numpy as np
-from numpy import ndarray 
-from numpy import std as standard_deviation
-from numpy import mean as dataset_mean
+from os import listdir as directory_list
 from os.path import isdir as is_dir
 from os.path import isfile as is_a_file
-from os import listdir as directory_list
 from os.path import join as path_join
+
+import numpy as np
+from imageio import imread as read_image
+from numpy import mean as dataset_mean
+from numpy import std as standard_deviation
+from numpy import ndarray
+
 from six.moves import cPickle as pickle
+
 
 class PickleMaker:
     def __init__(self, folder_with_objects_fullname_list, expected_objects_count, each_object_size_width = 28, each_object_size_height = 28,  pixel_depth = 255.0):
@@ -131,4 +134,3 @@ def compress_original_classes_to_pickle(src_root, expected_count):
 
 compress_original_classes_to_pickle("./notMNIST_large", 45000)
 compress_original_classes_to_pickle("./notMNIST_small", 1800)
-

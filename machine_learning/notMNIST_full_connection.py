@@ -2,8 +2,10 @@ import downloader
 import extractor
 import pickle_maker
 import pickle_prune
-from  tf_notMNIST_Training_Gradient_Descent import TF_notMNIST_Training_Gradient_Descent
-from  tf_notMNIST_Training_Stochastic_Gradient_Descent import TF_notMNIST_Training_Stochastic_Gradient_Descent
+from tf_notMNIST_Training_Gradient_Descent import \
+    TF_notMNIST_Training_Gradient_Descent
+from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
+    TF_notMNIST_Training_Stochastic_Gradient_Descent
 
 CLASSES_TO_TRAIN = 10
 TRAIN_BATCH = 1000

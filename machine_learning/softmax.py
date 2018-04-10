@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy import exp
-from numpy import sum as summary
-from numpy import arange
-from numpy import vstack
-from numpy import ones_like
 from numpy import max as maxium
+from numpy import sum as summary
+from numpy import arange, exp, ones_like, vstack
+
 
 def softmax(x):
     """Compute softmax values for each sets of scores in x."""

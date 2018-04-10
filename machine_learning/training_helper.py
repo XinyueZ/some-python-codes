@@ -4,6 +4,7 @@
 
 import numpy as np
 from numpy import arange
+
 from six.moves import cPickle as pickle
 
 

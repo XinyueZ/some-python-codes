@@ -4,10 +4,12 @@
 
 import sys
 from os import stat
-from os.path import join as path_join
 from os.path import exists as path_exists
-from six.moves.urllib.request import urlretrieve
+from os.path import join as path_join
 from urllib.request import urlopen as open_url
+
+from six.moves.urllib.request import urlretrieve
+
 
 class Downloader:
     def __init__(self, src_url, saved_data_root = "."):

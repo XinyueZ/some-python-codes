@@ -2,14 +2,12 @@
 # Run NN, faster, multinomial logistic regression using stochastic gradient descent.
 #
 import numpy as np
-import tensorflow as tf 
-from tensorflow import Variable
-from tensorflow import constant
-from tensorflow import placeholder
-from tensorflow import matmul
-from tensorflow import reduce_mean
-from tensorflow import global_variables_initializer
+import tensorflow as tf
+from tensorflow import (Variable, constant, global_variables_initializer,
+                        matmul, placeholder, reduce_mean)
+
 from training_helper import TrainingHelper
+
 
 class TF_notMNIST_Training_Stochastic_Gradient_Descent:
         def __init__(self, each_object_size_width = 28, each_object_size_height = 28, train_batch = 1000, train_steps = 10000, train_learning_rate = 0.5):
