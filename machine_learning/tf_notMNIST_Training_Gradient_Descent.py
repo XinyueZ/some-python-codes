@@ -10,7 +10,7 @@ from training_helper import TrainingHelper
 
 
 class TF_notMNIST_Training_Gradient_Descent:
-    def __init__(self, each_object_size_width=28, each_object_size_height=28, train_batch=1000, train_steps=801, train_learning_rate=0.5):
+    def __init__(self, each_object_size_width=28, each_object_size_height=28, train_batch=10000, train_steps=801, train_learning_rate=0.5):
         """
         Constructor.
         """
@@ -47,7 +47,7 @@ class TF_notMNIST_Training_Gradient_Descent:
 
         logits = self.__activation__(tf_train_dataset, tf_weights, tf_biases)
         loss, optimizer = self.__loss_optimizer__(
-            tf_train_labels, logits, self.train_learning_rate, beta_for_regularizer, tf_weights)
+            tf_train_labels, logits, self.train_learning_rate, beta_for_regularizer, [tf_weights])
 
         #
         # Convert dataset to predication

@@ -9,7 +9,7 @@ from tensorflow import (Variable, constant, global_variables_initializer,
 from training_helper import TrainingHelper
 
 
-class TF_notMNIST_Training_Stochastic_Gradient_Descent:
+class TF_notMNIST_Training_RELU_Layer_Stochastic_Gradient_Descent:
     def __init__(self, each_object_size_width=28, each_object_size_height=28,  train_steps=10000, train_learning_rate=0.5):
         """
         Constructor.
@@ -19,12 +19,12 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
         self.train_steps = train_steps
         self.train_learning_rate = train_learning_rate
 
-        helper = TrainingHelper()
-        self.__accuracy__ = helper.accuracy
-        self.__activation__ = helper.activation
-        self.__loss_optimizer__ = helper.loss_optimizer
+        self.helper = TrainingHelper()
+        self.__accuracy__ = self.helper.accuracy
+        self.__activation__ = self.helper.activation
+        self.__loss_optimizer__ = self.helper.loss_optimizer
 
-    def start_with(self, train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels, count_classes, data_batch_size=130, beta_for_regularizer=0.01):
+    def start_with(self, train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels, count_hide_layer, count_classes, data_batch_size=130, beta_for_regularizer=0.01, dropout_prob=0.5):
         """
         Start multinomial logistic regression using simple gradient descent.
         """
@@ -45,23 +45,43 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
         # Variables should be trained.
         # Classical weight and biases.
         #
-        tf_weights = Variable(tf.truncated_normal(
-            [self.each_object_size_width * self.each_object_size_height, count_classes]))
-        tf_biases = Variable(tf.zeros([count_classes]))
+        tf_weights_1 = Variable(tf.truncated_normal(
+            [self.each_object_size_width * self.each_object_size_height, count_hide_layer]))
+        tf_biases_1 = Variable(tf.zeros([count_hide_layer]))
 
-        logits = self.__activation__(tf_train_dataset, tf_weights, tf_biases)
+        tf_weights_2 = Variable(tf.truncated_normal(
+            [count_hide_layer, count_classes]))
+        tf_biases_2 = Variable(tf.zeros([count_classes]))
+
+        # Hidden-layer-1
+        tf_dropout_prob = placeholder(tf.float32)
+        logits_1 = self.helper.RELU_activation(
+            self.__activation__(tf_train_dataset, tf_weights_1, tf_biases_1),
+            tf_dropout_prob)
+
+        # Output-layer which connects with logits_1.
+        logits_2 = self.__activation__(logits_1, tf_weights_2, tf_biases_2)
+
+        # Loss and optimizer
         loss, optimizer = self.__loss_optimizer__(
-            tf_train_labels, logits, self.train_learning_rate, beta_for_regularizer, [tf_weights])
+            tf_train_labels, logits_2, self.train_learning_rate, beta_for_regularizer, [tf_weights_1, tf_weights_2])
 
         #
         # Convert dataset to predication
         # The actual problem is transformed into a probabilistic problem.
         #
-        predication_for_train = tf.nn.softmax(logits)
+        # Softmax the last layer always.
+        predication_for_train = tf.nn.softmax(logits_2)
+
         predication_for_valid = tf.nn.softmax(
-            self.__activation__(tf_valid_dataset, tf_weights, tf_biases))
+            self.__activation__(
+                self.helper.RELU_activation(
+                    self.__activation__(tf_valid_dataset, tf_weights_1, tf_biases_1)), tf_weights_2, tf_biases_2))
+
         predication_for_test = tf.nn.softmax(
-            self.__activation__(tf_test_dataset, tf_weights, tf_biases))
+            self.__activation__(
+                self.helper.RELU_activation(
+                    self.__activation__(tf_test_dataset, tf_weights_1, tf_biases_1)), tf_weights_2, tf_biases_2))
 
         #
         # Training
@@ -86,7 +106,8 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                     [optimizer, loss, predication_for_train],
                     feed_dict={
                         tf_train_dataset: batch_dataset,
-                        tf_train_labels: batch_labels
+                        tf_train_labels: batch_labels,
+                        tf_dropout_prob: dropout_prob
                     })
                 print("♻️ Batch with loss at step {}: {:2.4f}, accuracy: {:.1f}%, validation accuracy: {:.1f}%"
                       .format(
@@ -105,7 +126,8 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                 [optimizer, loss, predication_for_train],
                 feed_dict={
                     tf_train_dataset: batch_dataset,
-                    tf_train_labels: batch_labels
+                    tf_train_labels: batch_labels,
+                    tf_dropout_prob: dropout_prob
                 })
             print("👍 Final batch with loss at step {}: {:2.4f}, accuracy: {:.1f}%, validation accuracy: {:.1f}%"
                   .format(
