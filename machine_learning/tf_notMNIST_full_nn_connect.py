@@ -1,3 +1,6 @@
+import os
+os.system("clear")
+
 import downloader
 import extractor
 import pickle_maker
@@ -7,10 +10,12 @@ from tf_notMNIST_Training_Gradient_Descent import \
 from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
     TF_notMNIST_Training_Stochastic_Gradient_Descent
 
+
 CLASSES_TO_TRAIN = 10
 TRAIN_BATCH = 1000
-TRAIN_STEPS = 9000
+TRAIN_STEPS = 5000
 TRAIN_LEARNING_RATE = 0.01
+
 
 print("\n")
 print("⛷ Traning: NN, multinomial logistic regression using simple gradient descent.")
