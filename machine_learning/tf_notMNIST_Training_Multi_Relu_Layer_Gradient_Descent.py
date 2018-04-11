@@ -26,6 +26,7 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         self.__loss_optimizer__ = helper.loss_optimizer
         self.__RELU_activation__ = helper.RELU_activation
         self.__create_hidden_layer__ = helper.create_hidden_layer
+        self.__create_exponential_rate__ = helper.create_exponential_rate
 
     def start_with(self, train_dataset, train_labels, valid_dataset, valid_labels, test_dataset, test_labels, count_hide_layer, total_hidden_layers, count_classes, data_batch_size=130, beta_for_regularizer=0.01, dropout_prob=0.5):
         """
@@ -92,7 +93,12 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         # Loss and optimizer
         #
         loss, optimizer = self.__loss_optimizer__(
-            tf_train_labels, logits_output, self.train_learning_rate, beta_for_regularizer, tf_weights_list)
+            tf_train_labels,
+            logits_output,
+            self.__create_exponential_rate__(
+                self.train_learning_rate, self.train_steps),
+            beta_for_regularizer,
+            tf_weights_list)
 
         #
         # Convert dataset to predication
@@ -110,7 +116,7 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         # predication for varlidation
         #
         last_predication_for_valid = self.__RELU_activation__(
-                self.__activation__(tf_valid_dataset, tf_weights_list[0], tf_biases_list[0]))
+            self.__activation__(tf_valid_dataset, tf_weights_list[0], tf_biases_list[0]))
         layer_index = 1
         while layer_index < total_hidden_layers:
             last_predication_for_valid = self.__RELU_activation__(
@@ -123,7 +129,7 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         # predication for test
         #
         last_predication_for_test_dataset = self.__RELU_activation__(
-                self.__activation__(tf_test_dataset, tf_weights_list[0], tf_biases_list[0]))
+            self.__activation__(tf_test_dataset, tf_weights_list[0], tf_biases_list[0]))
         layer_index = 1
         while layer_index < total_hidden_layers:
             last_predication_for_test_dataset = self.__RELU_activation__(
