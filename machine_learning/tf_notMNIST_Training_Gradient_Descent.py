@@ -69,7 +69,7 @@ class TF_notMNIST_Training_Gradient_Descent:
             for step in range(self.train_steps):
                 _, ls, predications = sess.run(
                     [optimizer, loss, predication_for_train])
-                print("♻️ Loss at step {}: {:2.4f}, Training accuracy: {:.1f}%, Validation accuracy: {:.1f}%"
+                print("♻️ Loss at step {}: {:2.4f}, Training accuracy: {:.2f}, Validation accuracy: {:.2f}"
                       .format(
                           step,
                           ls,
@@ -81,7 +81,7 @@ class TF_notMNIST_Training_Gradient_Descent:
 
             _, ls, predications = sess.run(
                 [optimizer, loss, predication_for_train])
-            print("👍 Final loss at step {}: {:2.4f}, Training accuracy: {:.1f}%, Validation accuracy: {:.1f}%"
+            print("👍 Final loss at step {}: {:2.4f}, Training accuracy: {:.2f}, Validation accuracy: {:.2f}"
                   .format(
                       step,
                       ls,
@@ -90,5 +90,5 @@ class TF_notMNIST_Training_Gradient_Descent:
                       self.__accuracy__(
                           predication_for_valid.eval(), valid_labels)
                   ))
-            print('Test accuracy: {:.1f}%'.format(self.__accuracy__(
+            print('Test accuracy: {:.2f}'.format(self.__accuracy__(
                 predication_for_test.eval(), test_labels)))

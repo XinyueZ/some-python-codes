@@ -88,7 +88,7 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                         tf_train_dataset: batch_dataset,
                         tf_train_labels: batch_labels
                     })
-                print("♻️ Batch with loss at step {}: {:2.4f}, accuracy: {:.1f}%, validation accuracy: {:.1f}%"
+                print("♻️ Batch with loss at step {}: {:2.4f}, accuracy: {:.2f}, validation accuracy: {:.2f}"
                       .format(
                           step,
                           ls,
@@ -107,7 +107,7 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                     tf_train_dataset: batch_dataset,
                     tf_train_labels: batch_labels
                 })
-            print("👍 Final batch with loss at step {}: {:2.4f}, accuracy: {:.1f}%, validation accuracy: {:.1f}%"
+            print("👍 Final batch with loss at step {}: {:2.4f}, accuracy: {:.2f}, validation accuracy: {:.2f}"
                   .format(
                       step,
                       ls,
@@ -115,5 +115,5 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                       self.__accuracy__(
                           predication_for_valid.eval(), valid_labels)
                   ))
-            print('Test accuracy: {:.1f}%'.format(self.__accuracy__(
+            print('Test accuracy: {:.2f}'.format(self.__accuracy__(
                 predication_for_test.eval(), test_labels)))
