@@ -41,7 +41,7 @@ class TrainingHelper:
         lb = (arange(count_classes) == labels[:, None]).astype(np.float32)
         return ds, lb
 
-    def accuracy(self,  predictions, labels):
+    def __accuracy__(self,  predictions, labels):
         return (100.0 * sum(argmax(predictions, 1) == argmax(labels, 1)) / predictions.shape[0])
 
     def activation(self, x, weights, biases):
@@ -92,3 +92,17 @@ class TrainingHelper:
 
     def create_exponential_rate(self, start_learning_rate, training_train_steps):
         return tf.train.exponential_decay(start_learning_rate, training_train_steps, 100000, 0.96, staircase=True)
+
+    def print_test_accuracy(self, predication_for_test, test_labels):
+        print('👍 Test accuracy: {:.2f}'.format(self.__accuracy__(
+            predication_for_test.eval(), test_labels)))
+
+    def print_predications(self, step, loss, predications, batch_labels, predication_for_valid, valid_labels):
+        print("♻️ Batch with loss at step {}: {:2.4f}, accuracy: {:.2f}, validation accuracy: {:.2f}"
+              .format(
+                  step,
+                  loss,
+                  self.__accuracy__(predications, batch_labels),
+                  self.__accuracy__(
+                      predication_for_valid.eval(), valid_labels)
+              ))

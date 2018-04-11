@@ -22,7 +22,8 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         self.train_learning_rate = train_learning_rate
 
         helper = TrainingHelper()
-        self.__accuracy__ = helper.accuracy
+        self.__print_predications__ = helper.print_predications
+        self.__print_test_accuracy__ = helper.print_test_accuracy
         self.__activation__ = helper.activation
         self.__loss_optimizer__ = helper.loss_optimizer
         self.__RELU_activation__ = helper.RELU_activation
@@ -170,32 +171,6 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
                         tf_train_labels: batch_labels,
                         tf_dropout_prob: dropout_prob
                     })
-                print("♻️ Batch with loss at step {}: {:2.4f}, accuracy: {:.2f}, validation accuracy: {:.2f}"
-                      .format(
-                          step,
-                          ls,
-                          self.__accuracy__(predications, batch_labels),
-                          self.__accuracy__(
-                              predication_for_valid.eval(), valid_labels)
-                      ))
-            offset = (
-                step * data_batch_size) % (train_labels.shape[0] - data_batch_size)
-            batch_dataset = train_dataset[offset:(offset + data_batch_size), :]
-            batch_labels = train_labels[offset:(offset + data_batch_size), :]
-            _, ls, predications = sess.run(
-                [optimizer, loss, predication_for_train],
-                feed_dict={
-                    tf_train_dataset: batch_dataset,
-                    tf_train_labels: batch_labels,
-                    tf_dropout_prob: dropout_prob
-                })
-            print("👍 Final batch with loss at step {}: {:2.4f}, accuracy: {:.2f}, validation accuracy: {:.2f}"
-                  .format(
-                      step,
-                      ls,
-                      self.__accuracy__(predications, batch_labels),
-                      self.__accuracy__(
-                          predication_for_valid.eval(), valid_labels)
-                  ))
-            print('Test accuracy: {:.2f}'.format(self.__accuracy__(
-                predication_for_test.eval(), test_labels)))
+                self.__print_predications__(step, ls, predications, batch_labels, predication_for_valid, valid_labels)
+ 
+            self.__print_test_accuracy__(predication_for_test, test_labels) 

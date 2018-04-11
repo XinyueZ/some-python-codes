@@ -21,7 +21,8 @@ class TF_notMNIST_Training_Gradient_Descent:
         self.train_learning_rate = train_learning_rate
 
         helper = TrainingHelper()
-        self.__accuracy__ = helper.accuracy
+        self.__print_predications__ = helper.print_predications
+        self.__print_test_accuracy__ = helper.print_test_accuracy
         self.__activation__ = helper.activation
         self.__loss_optimizer__ = helper.loss_optimizer
 
@@ -69,26 +70,7 @@ class TF_notMNIST_Training_Gradient_Descent:
             for step in range(self.train_steps):
                 _, ls, predications = sess.run(
                     [optimizer, loss, predication_for_train])
-                print("♻️ Loss at step {}: {:2.4f}, Training accuracy: {:.2f}, Validation accuracy: {:.2f}"
-                      .format(
-                          step,
-                          ls,
-                          self.__accuracy__(predications,
-                                            train_labels[:self.train_batch, :]),
-                          self.__accuracy__(
-                              predication_for_valid.eval(), valid_labels)
-                      ), sep=' ',  end="\r", flush=True)
-
-            _, ls, predications = sess.run(
-                [optimizer, loss, predication_for_train])
-            print("👍 Final loss at step {}: {:2.4f}, Training accuracy: {:.2f}, Validation accuracy: {:.2f}"
-                  .format(
-                      step,
-                      ls,
-                      self.__accuracy__(predications,
-                                        train_labels[:self.train_batch, :]),
-                      self.__accuracy__(
-                          predication_for_valid.eval(), valid_labels)
-                  ))
-            print('Test accuracy: {:.2f}'.format(self.__accuracy__(
-                predication_for_test.eval(), test_labels)))
+                self.__print_predications__(
+                    step, ls, predications,  train_labels[:self.train_batch, :], predication_for_valid, valid_labels) 
+            
+            self.__print_test_accuracy__(predication_for_test, test_labels)
