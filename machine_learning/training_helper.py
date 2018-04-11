@@ -2,10 +2,12 @@
 # Util class for help training.
 #
 
+from math import sqrt
+
 import numpy as np
-from numpy import arange
 import tensorflow as tf
-from tensorflow import(reduce_mean, matmul)
+from numpy import arange, power
+from tensorflow import (Variable, matmul, reduce_mean, truncated_normal, zeros)
 
 from six.moves import cPickle as pickle
 
@@ -74,3 +76,18 @@ class TrainingHelper:
             train_learning_rate).minimize(loss)
 
         return loss, optimizer
+
+    def create_hidden_layer(self, count_1_hide_layer, layer_position):
+        """
+        Helper method to create hidden-layer.
+
+        Count of nodes on current layer depends on the count of previous layer.
+        """
+        former_count_hide_layer = int(count_1_hide_layer * power(0.5, layer_position - 1))
+        current_count_hide_layer = int(count_1_hide_layer * power(0.5, layer_position))
+
+        weights = Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
+                                            stddev=sqrt(2.0/former_count_hide_layer)))
+        biases = Variable(zeros([current_count_hide_layer]))
+
+        return weights, biases, current_count_hide_layer
