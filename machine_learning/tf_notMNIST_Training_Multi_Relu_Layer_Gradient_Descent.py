@@ -123,28 +123,24 @@ class TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent:
         #
         # predication for varlidation
         #
-        last_predication_for_valid = self.__RELU_activation__(
-            self.__activation__(tf_valid_dataset, tf_weights_list[0], tf_biases_list[0]))
-        layer_index = 1
+        layer_index = 0
         while layer_index < total_hidden_layers:
-            last_predication_for_valid = self.__RELU_activation__(
-                self.__activation__(last_predication_for_valid, tf_weights_list[layer_index], tf_biases_list[layer_index]))
+            tf_valid_dataset = self.__RELU_activation__(
+                self.__activation__(tf_valid_dataset, tf_weights_list[layer_index], tf_biases_list[layer_index]))
             layer_index += 1
         predication_for_valid = tf.nn.softmax(
-            self.__activation__(last_predication_for_valid, tf_weights_output, tf_biases_output))
+            self.__activation__(tf_valid_dataset, tf_weights_output, tf_biases_output))
 
         #
         # predication for test
         #
-        last_predication_for_test_dataset = self.__RELU_activation__(
-            self.__activation__(tf_test_dataset, tf_weights_list[0], tf_biases_list[0]))
-        layer_index = 1
+        layer_index = 0
         while layer_index < total_hidden_layers:
-            last_predication_for_test_dataset = self.__RELU_activation__(
-                self.__activation__(last_predication_for_test_dataset, tf_weights_list[layer_index], tf_biases_list[layer_index]))
+            tf_test_dataset = self.__RELU_activation__(
+                self.__activation__(tf_test_dataset, tf_weights_list[layer_index], tf_biases_list[layer_index]))
             layer_index += 1
         predication_for_test = tf.nn.softmax(
-            self.__activation__(last_predication_for_test_dataset, tf_weights_output, tf_biases_output))
+            self.__activation__(tf_test_dataset, tf_weights_output, tf_biases_output))
 
         #
         # Training
