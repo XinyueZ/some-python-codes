@@ -79,13 +79,12 @@ class TrainingHelper:
         y = np.array([0, #For 1. image type 
                       1, #For 2. image type
                       2])#For 3. image type
-        >>> (np.arange(3)==y[:, None]).astype(np.float32)
+        run (np.arange(3)==y[:, None]).astype(np.float32)
         array([
             [1., 0., 0.], # For 1. image
             [0., 1., 0.], # For 2. image
             [0., 0., 1.]],# For 3. image
         dtype=float32)
-
         """
         ds = dataset.reshape((-1, self.each_object_size_width *
                               self.each_object_size_height)).astype(np.float32)
