@@ -35,6 +35,57 @@ class TrainingHelper:
     def flat_dataset_labels(self, dataset, labels, count_classes):
         """
         Flat dataset, labels to 2-D arrays.
+
+        Consider this:
+
+        list of image 2 X 3 in pixels
+        z = np.array(
+                [
+                    [1,2,3],
+                    [4,5,6]
+                ],
+                [
+                    [7,8,9],
+                    [10,11,12]
+                ],
+                [
+                    [13,14,15],
+                    [16,17,18]
+        ])
+
+
+        run: z.reshape((-1, 6)) to flat 2-D to 1-D array
+        array([
+            [ 1,  2,  3,  4,  5,  6],
+            [ 7,  8,  9, 10, 11, 12],
+            [13, 14, 15, 16, 17, 18]])
+
+        Consisder this:
+        
+        If: there're 2 types of image:
+
+        y = np.array([0, #For 1. image type 
+                      1, #For 2. image type
+                      1])#For 3. image type
+        run (np.arange(2)==y[:, None]).astype(np.float32)
+        array([
+            [1., 0.], # For 1. image
+            [0., 1.], # For 2. image
+            [0., 1.]],# For 3. image
+        dtype=float32)
+
+        If: there're 3 types of image:
+        
+        y = np.array([0, #For 1. image type 
+                      1, #For 2. image type
+                      2])#For 3. image type
+        >>> (np.arange(3)==y[:, None]).astype(np.float32)
+        array([
+            [1., 0., 0.], # For 1. image
+            [0., 1., 0.], # For 2. image
+            [0., 0., 1.]],# For 3. image
+        dtype=float32)
+
         """
         ds = dataset.reshape((-1, self.each_object_size_width *
                               self.each_object_size_height)).astype(np.float32)
