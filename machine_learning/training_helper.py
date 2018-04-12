@@ -59,7 +59,7 @@ class TrainingHelper:
             return tf.nn.dropout(relu_layer, dropout_prob)
         return relu_layer
 
-    def loss_optimizer(self, y, activation, train_learning_rate, beta, weights):
+    def loss_optimizer(self, y, activation, train_learning_rate, beta, weights, train_steps=None):
         """
         Return loss and optimizer functions.
         """
@@ -74,9 +74,13 @@ class TrainingHelper:
         weights.append(holder)
 
         loss = reduce_mean(loss + beta * reg)
-        optimizer = tf.train.GradientDescentOptimizer(
-            train_learning_rate).minimize(loss)
-
+        optimizer = None
+        if train_steps is None:
+            optimizer = tf.train.GradientDescentOptimizer(
+                train_learning_rate).minimize(loss)
+        else:
+            optimizer = tf.train.GradientDescentOptimizer(
+                train_learning_rate).minimize(loss, global_step=train_steps)
         return loss, optimizer
 
     def create_hidden_layer(self, former_count_hide_layer, current_count_hide_layer):
@@ -88,7 +92,7 @@ class TrainingHelper:
         weights = Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
                                             stddev=sqrt(2.0/former_count_hide_layer)))
         biases = Variable(zeros([current_count_hide_layer]))
-        return weights, biases, current_count_hide_layer
+        return weights, biases
 
     def create_exponential_rate(self, start_learning_rate, training_train_steps):
         return tf.train.exponential_decay(start_learning_rate, training_train_steps, 100000, 0.96, staircase=True)

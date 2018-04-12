@@ -18,9 +18,9 @@ from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
 
 CLASSES_TO_TRAIN = 10
 TRAIN_BATCH = 10000
-TRAIN_STEPS = 10
+TRAIN_STEPS = 4000
 TRAIN_LEARNING_RATE = 0.5
-HIDE_LAYER = 1024  # Nodes on hidden-layout
+HIDE_LAYER = 2048  # Nodes on hidden-layout
 TOTAL_HIDDEN_LAYERS = 5  # How many hidden-layers.
 
 
@@ -33,6 +33,7 @@ TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent(
     pickle_prune.train_dataset, pickle_prune.train_labels,
     pickle_prune.valid_dataset, pickle_prune.valid_labels,
     pickle_prune.test_dataset, pickle_prune.test_labels,
+    # For this training, it is used in first hidden-layer for second hidden-layer.
     HIDE_LAYER,
     TOTAL_HIDDEN_LAYERS,
     CLASSES_TO_TRAIN
