@@ -185,11 +185,11 @@ print("👍 compressed pickle size: {}".format(info.st_size))
 
 print("► reformat total.pickle.")
 train_dataset, train_labels = training_helper.flat_dataset_labels(
-    train_dataset, train_labels, 10)
+    train_dataset, train_labels, config.CLASSES_TO_TRAIN)
 valid_dataset, valid_labels = training_helper.flat_dataset_labels(
-    valid_dataset, valid_labels, 10)
+    valid_dataset, valid_labels, config.CLASSES_TO_TRAIN)
 test_dataset, test_labels = training_helper.flat_dataset_labels(
-    test_dataset, test_labels, 10)
+    test_dataset, test_labels, config.CLASSES_TO_TRAIN)
 
 print("👍 ")
 print('Training:', train_dataset.shape, train_labels.shape)
