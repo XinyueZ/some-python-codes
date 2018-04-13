@@ -5,7 +5,7 @@ import config
 import numpy as np
 import tensorflow as tf
 from tensorflow import (Variable, constant, global_variables_initializer,
-                        matmul, reduce_mean, truncated_normal, zeros)
+                        truncated_normal, zeros)
 
 from tf_training_helper import TrainingHelper
 

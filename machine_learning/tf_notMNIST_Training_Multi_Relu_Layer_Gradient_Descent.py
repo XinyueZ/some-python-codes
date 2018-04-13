@@ -7,7 +7,7 @@ import numpy as np
 import tensorflow as tf
 from numpy import arange, power
 from tensorflow import (Variable, constant, global_variables_initializer,
-                        placeholder, truncated_normal, zeros)
+                        placeholder)
 
 from tf_training_helper import TrainingHelper
 

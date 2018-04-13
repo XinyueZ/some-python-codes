@@ -6,7 +6,7 @@ import config
 import numpy as np
 import tensorflow as tf
 from tensorflow import (Variable, constant, global_variables_initializer,
-                        matmul, placeholder, reduce_mean, zeros)
+                        placeholder,  zeros)
 
 from tf_training_helper import TrainingHelper
 

@@ -5,7 +5,7 @@ import config
 import numpy as np
 import tensorflow as tf
 from tensorflow import (Variable, constant, global_variables_initializer,
-                        matmul, placeholder, reduce_mean)
+                        placeholder)
 
 from tf_training_helper import TrainingHelper
 
@@ -90,6 +90,7 @@ class TF_notMNIST_Training_Stochastic_Gradient_Descent:
                         tf_train_dataset: batch_dataset,
                         tf_train_labels: batch_labels
                     })
-                self.__print_predications__(step, ls, predications, batch_labels, predication_for_valid, valid_labels)
- 
-            self.__print_test_accuracy__(predication_for_test, test_labels) 
+                self.__print_predications__(
+                    step, ls, predications, batch_labels, predication_for_valid, valid_labels)
+
+            self.__print_test_accuracy__(predication_for_test, test_labels)
