@@ -18,9 +18,9 @@ from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
 
 
 TRAIN_BATCH = 10000
-TRAIN_STEPS = 500
+TRAIN_STEPS = 1500
 TRAIN_LEARNING_RATE = 0.5
-HIDE_LAYER = 2048  # Nodes on hidden-layout
+HIDE_LAYER = 1024  # Nodes on hidden-layout
 TOTAL_HIDDEN_LAYERS = 5  # How many hidden-layers.
 
 
