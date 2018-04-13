@@ -46,7 +46,7 @@ Have fun.
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).
 - [NN, one RELU layer](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Relu_Layer_Gradient_Descent).
 - [NN, multiple RELU layer(see. TOTAL_HIDDEN_LAYERS in tf_notMNIST_full_nn_connect.py)](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Multi_Relu_Layer_Gradient_Descent.py).
-- [NN, implementation of convolutional traning](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/machine_learning/tf_notMNIST_Training_Convolutional_Layer.py).
+- [NN, implementation of convolutional traning](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Convolutional_Layer.py).
 - [Make connection for the network work](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_full_nn_connect.py).
 
 ```python3 tf_notMNIST_full_nn_connect.py``` you will see training results.
