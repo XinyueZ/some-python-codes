@@ -80,7 +80,7 @@ class PicklePrune:
                     objects_set = pickle.load(in_file)
                     shuffle_all(objects_set)
 
-                    # [valid_batch_each_class:end_train_plus_valid] -> [:end_train_plus_valid-valid_batch_each_class] 
+                    # [valid_batch_each_class:end_train_plus_valid] -> [end_train_plus_valid-valid_batch_each_class:] 
                     train_dataset[start_train:end_train, :,
                                   :] = objects_set[valid_batch_each_class:end_train_plus_valid, :, :]
                     train_labels[start_train:end_train] = label
