@@ -8,18 +8,20 @@ import config
 import numpy as np
 import tensorflow as tf
 from numpy import (arange, argmax, sum)
-from tensorflow import (Variable, matmul, reduce_mean, truncated_normal, zeros)
+from tensorflow import (Variable, matmul, reduce_mean,
+                        truncated_normal, zeros, reshape)
 
 from six.moves import cPickle as pickle
 
 
 class TrainingHelper:
-    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH):
+    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_HEIGHT, channel=1):
         """
         Constructor 
         """
         self.each_object_size_width = each_object_size_width
         self.each_object_size_height = each_object_size_height
+        self.channel = channel
 
     def save_pickle(self, pickle_fullname, data_to_save):
         """
@@ -32,6 +34,17 @@ class TrainingHelper:
         except Exception as e:
             print("Unable to read {}: {}".format(pickle_fullname,  e))
             raise
+
+    def flat_dataset_labels_with_channels(self, dataset, labels, count_classes):
+        """
+        Flat dataset, labels to 2-D arrays.
+        """
+        ds = dataset.reshape((-1,
+                              self.each_object_size_width,
+                              self.each_object_size_height,
+                              self.channel)).astype(np.float32)
+        lb = (arange(count_classes) == labels[:, None]).astype(np.float32)
+        return ds, lb
 
     def flat_dataset_labels(self, dataset, labels, count_classes):
         """
@@ -62,7 +75,7 @@ class TrainingHelper:
             [13, 14, 15, 16, 17, 18]])
 
         Consisder this:
-        
+
         If: there're 2 types of image:
 
         y = np.array([0, #For 1. image type 
@@ -76,7 +89,7 @@ class TrainingHelper:
         dtype=float32)
 
         If: there're 3 types of image:
-        
+
         y = np.array([0, #For 1. image type 
                       1, #For 2. image type
                       2])#For 3. image type
@@ -100,6 +113,26 @@ class TrainingHelper:
         Define math computation, the logits.
         """
         return matmul(x, weights) + biases
+
+    def convolutional_model(self, data, layer_1, layer_2, layer_3, layer_4, padding_c="SAME"):
+        c = tf.nn.conv2d(data,
+                         layer_1["weights"],
+                         [1, 2, 2, 1],
+                         padding=padding_c)
+        hidden = tf.nn.relu(c + layer_1["biases"])
+
+        c = tf.nn.conv2d(hidden,
+                         layer_2["weights"],
+                         [1, 2, 2, 1],
+                         padding=padding_c)
+        hidden = tf.nn.relu(c+layer_2["biases"])
+
+        shape = hidden.get_shape().as_list()
+        _reshape_ = reshape(hidden, [shape[0], shape[1]*shape[2]*shape[3]])
+        hidden = tf.nn.relu(
+            matmul(_reshape_, layer_3["weights"]) + layer_3["biases"])
+
+        return matmul(hidden, layer_4["weights"]) + layer_4["biases"]
 
     def RELU_activation(self, activation, dropout_prob=None):
         """

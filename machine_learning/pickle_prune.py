@@ -18,7 +18,7 @@ from tf_training_helper import TrainingHelper
 
 
 class PicklePrune:
-    def __init__(self, pickle_fullname_list, train_size, valid_size=0, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH):
+    def __init__(self, pickle_fullname_list, train_size, valid_size=0, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_HEIGHT):
         """
         Merge and prune the training data as needed. Depending on your computer setup, you might not be able to fit it all in memory, and you can tune train_size as needed. The labels will be stored into a separate array of integers 0 through 9. Also create a validation dataset for hyperparameter tuning.
         """
@@ -182,16 +182,3 @@ print("👍 compressed pickle size: {}".format(info.st_size))
 
 # TODO Read totals.pickle to reconstruct all datasets and labels for next steps.
 # For evaluation, use all from memory directly.
-
-print("► reformat total.pickle.")
-train_dataset, train_labels = training_helper.flat_dataset_labels(
-    train_dataset, train_labels, config.CLASSES_TO_TRAIN)
-valid_dataset, valid_labels = training_helper.flat_dataset_labels(
-    valid_dataset, valid_labels, config.CLASSES_TO_TRAIN)
-test_dataset, test_labels = training_helper.flat_dataset_labels(
-    test_dataset, test_labels, config.CLASSES_TO_TRAIN)
-
-print("👍 ")
-print('Training:', train_dataset.shape, train_labels.shape)
-print('Validation:', valid_dataset.shape, valid_labels.shape)
-print('Testing:', test_dataset.shape, test_labels.shape)

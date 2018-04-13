@@ -18,7 +18,7 @@ from six.moves import cPickle as pickle
 
 
 class PickleMaker:
-    def __init__(self, folder_with_objects_fullname_list, expected_objects_count, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH,  pixel_depth=255.0):
+    def __init__(self, folder_with_objects_fullname_list, expected_objects_count, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_HEIGHT,  pixel_depth=255.0):
         """
         Construct the PickleMaker that can convert objects under folders of
         folder_with_objects_fullname_list to a collection of 2-D, a 3-D collection.

@@ -12,7 +12,7 @@ from tf_training_helper import TrainingHelper
 
 
 class TF_notMNIST_Training_RELU_Layer_Stochastic_Gradient_Descent:
-    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH,  train_steps=10000, train_learning_rate=0.5):
+    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_HEIGHT,  train_steps=10000, train_learning_rate=0.5):
         """
         Constructor.
         """
