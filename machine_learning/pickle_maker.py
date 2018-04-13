@@ -2,7 +2,6 @@
 # Util class PickleMaker will convert objects under one folder
 # to a collection of 2-D collection, a 3-D collection will be.
 #
-import config
 from os import listdir as directory_list
 from os.path import isdir as is_dir
 from os.path import isfile as is_a_file
@@ -14,6 +13,7 @@ from numpy import mean as dataset_mean
 from numpy import std as standard_deviation
 from numpy import ndarray
 
+import config
 from six.moves import cPickle as pickle
 
 

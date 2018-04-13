@@ -130,14 +130,19 @@ class TrainingHelper:
         shape = hidden.get_shape().as_list()
         _reshape_ = reshape(hidden, [shape[0], shape[1]*shape[2]*shape[3]])
 
-        hidden = tf.nn.relu(self.activation(_reshape_, layer_3["weights"], layer_3["biases"])
-        return self.activation(hidden, layer_4["weights"], layer_4["biases"])
+        hidden = tf.nn.relu(
+            self.activation(
+                _reshape_,
+                layer_3["weights"], layer_3["biases"]))
+        return self.activation(
+            hidden,
+            layer_4["weights"], layer_4["biases"])
 
     def RELU_activation(self, activation, dropout_prob=None):
         """
         RELU layer.
         """
-        relu_layer=tf.nn.relu(activation)
+        relu_layer = tf.nn.relu(activation)
         if dropout_prob is not None:
             return tf.nn.dropout(relu_layer, dropout_prob)
         return relu_layer
@@ -146,23 +151,23 @@ class TrainingHelper:
         """
         Return loss and optimizer functions.
         """
-        loss=reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
+        loss = reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             labels=y, logits=activation))
 
-        holder=weights.pop()
-        reg=tf.nn.l2_loss(holder)
+        holder = weights.pop()
+        reg = tf.nn.l2_loss(holder)
         # Loss function using L2 Regularization
         for w in weights:
             reg += tf.nn.l2_loss(w)
         weights.append(holder)
 
-        loss=reduce_mean(loss + beta * reg)
-        optimizer=None
+        loss = reduce_mean(loss + beta * reg)
+        optimizer = None
         if train_steps is None:
-            optimizer=tf.train.GradientDescentOptimizer(
+            optimizer = tf.train.GradientDescentOptimizer(
                 train_learning_rate).minimize(loss)
         else:
-            optimizer=tf.train.GradientDescentOptimizer(
+            optimizer = tf.train.GradientDescentOptimizer(
                 train_learning_rate).minimize(loss, global_step=train_steps)
         return loss, optimizer
 
@@ -172,9 +177,9 @@ class TrainingHelper:
 
         Count of nodes on current layer depends on the count of previous layer.
         """
-        weights=Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
+        weights = Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
                                             stddev=sqrt(2.0/former_count_hide_layer)))
-        biases=Variable(zeros([current_count_hide_layer]))
+        biases = Variable(zeros([current_count_hide_layer]))
         return weights, biases
 
     def create_exponential_rate(self, start_learning_rate, training_train_steps):
@@ -192,4 +197,4 @@ class TrainingHelper:
                   self.__accuracy__(predications, batch_labels),
                   self.__accuracy__(
                       predication_for_valid.eval(), valid_labels)
-              ))
+              ), sep='',  end="\r", flush=True)
