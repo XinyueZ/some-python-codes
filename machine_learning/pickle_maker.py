@@ -148,5 +148,5 @@ def compress_original_classes_to_pickle(src_root, expected_count):
     maker.make()
 
 
-compress_original_classes_to_pickle("./notMNIST_large", 45000)
-compress_original_classes_to_pickle("./notMNIST_small", 1800)
+compress_original_classes_to_pickle("./notMNIST_large", config.EXPECTED_COUNT_TRAIN_DATA)
+compress_original_classes_to_pickle("./notMNIST_small", config.EXPECTED_COUNT_TEST_DATA)

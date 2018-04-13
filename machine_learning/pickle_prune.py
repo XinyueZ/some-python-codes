@@ -135,11 +135,12 @@ def get_prune_pickles(src_root):
 print("► try classes with pickles.")
 
 prune_pickles = get_prune_pickles("./notMNIST_large")
-pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
+pickle_prune = PicklePrune(
+    prune_pickles, config.TRAIN_SIZE, config.TRAIN_VAILD_SIZE)
 train_dataset, train_labels, valid_dataset, valid_labels = pickle_prune.prune()
 
 prune_pickles = get_prune_pickles("./notMNIST_small")
-pickle_prune = PicklePrune(prune_pickles, 10000)
+pickle_prune = PicklePrune(prune_pickles, config.TEST_TRAIN_SIZE)
 test_dataset, test_labels, _, _ = pickle_prune.prune()
 
 print("👍 ")
@@ -149,12 +150,13 @@ print('Testing:', test_dataset.shape, test_labels.shape)
 
 print("► randomize.")
 prune_pickles = get_prune_pickles("./notMNIST_large")
-pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
+pickle_prune = PicklePrune(
+    prune_pickles, config.TRAIN_SIZE, config.TRAIN_VAILD_SIZE)
 train_dataset, train_labels, valid_dataset, valid_labels = pickle_prune.prune(
     True)
 
 prune_pickles = get_prune_pickles("./notMNIST_small")
-pickle_prune = PicklePrune(prune_pickles, 10000)
+pickle_prune = PicklePrune(prune_pickles, config.TEST_TRAIN_SIZE)
 test_dataset, test_labels, _, _ = pickle_prune.prune(True)
 
 print("👍 ")

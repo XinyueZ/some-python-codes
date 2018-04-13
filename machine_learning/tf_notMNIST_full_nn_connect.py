@@ -2,6 +2,7 @@ import os
 
 os.system("clear")
 
+import config
 import downloader
 import extractor
 import pickle_maker
@@ -16,9 +17,8 @@ from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
     TF_notMNIST_Training_Stochastic_Gradient_Descent
 
 
-CLASSES_TO_TRAIN = 10
 TRAIN_BATCH = 10000
-TRAIN_STEPS = 4000
+TRAIN_STEPS = 500
 TRAIN_LEARNING_RATE = 0.5
 HIDE_LAYER = 2048  # Nodes on hidden-layout
 TOTAL_HIDDEN_LAYERS = 5  # How many hidden-layers.
@@ -36,7 +36,7 @@ TF_notMNIST_Training_Multi_RELU_Layer_Stochastic_Gradient_Descent(
     # For this training, it is used in first hidden-layer for second hidden-layer.
     HIDE_LAYER,
     TOTAL_HIDDEN_LAYERS,
-    CLASSES_TO_TRAIN
+    config.CLASSES_TO_TRAIN
 )
 
 
@@ -51,7 +51,7 @@ TF_notMNIST_Training_RELU_Layer_Stochastic_Gradient_Descent(
     pickle_prune.valid_dataset, pickle_prune.valid_labels,
     pickle_prune.test_dataset, pickle_prune.test_labels,
     HIDE_LAYER,
-    CLASSES_TO_TRAIN
+    config.CLASSES_TO_TRAIN
 )
 
 
@@ -65,7 +65,7 @@ TF_notMNIST_Training_Stochastic_Gradient_Descent(
     pickle_prune.train_dataset, pickle_prune.train_labels,
     pickle_prune.valid_dataset, pickle_prune.valid_labels,
     pickle_prune.test_dataset, pickle_prune.test_labels,
-    CLASSES_TO_TRAIN
+    config.CLASSES_TO_TRAIN
 )
 
 
@@ -79,5 +79,5 @@ TF_notMNIST_Training_Gradient_Descent(
     pickle_prune.train_dataset, pickle_prune.train_labels,
     pickle_prune.valid_dataset, pickle_prune.valid_labels,
     pickle_prune.test_dataset, pickle_prune.test_labels,
-    CLASSES_TO_TRAIN
+    config.CLASSES_TO_TRAIN
 )
