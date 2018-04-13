@@ -38,7 +38,7 @@ I keep these code as simple as possible to catch and easy to understand for furt
 
 
 ## Build Neural Network for classical nonMNIST.
-A prediction about alphabet classification from "A" to "J". Official sample of [Tensorflow](https://www.tensorflow.org/) may let begginers in sleep, this implementation is easy. It is my own implementation is a little OOP which can bring some reusable codes for this clasical traning-case. 
+A prediction about alphabet classification from "A" to "J". Official sample of [Tensorflow](https://www.tensorflow.org/) may let begginers in sleep, this implementation is easy. It's my own implementation with a little OOP which can bring some reusable codes for this classical training-case. 
 
 Have fun.
 
