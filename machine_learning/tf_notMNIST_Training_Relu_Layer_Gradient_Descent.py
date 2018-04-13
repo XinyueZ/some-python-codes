@@ -2,16 +2,17 @@
 # Run NN, faster, multinomial logistic regression using stochastic gradient descent
 # with one RELU layer.
 #
+import config
 import numpy as np
 import tensorflow as tf
 from tensorflow import (Variable, constant, global_variables_initializer,
                         matmul, placeholder, reduce_mean, zeros)
 
-from training_helper import TrainingHelper
+from tf_training_helper import TrainingHelper
 
 
 class TF_notMNIST_Training_RELU_Layer_Stochastic_Gradient_Descent:
-    def __init__(self, each_object_size_width=28, each_object_size_height=28,  train_steps=10000, train_learning_rate=0.5):
+    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH,  train_steps=10000, train_learning_rate=0.5):
         """
         Constructor.
         """

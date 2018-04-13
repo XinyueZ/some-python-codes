@@ -4,6 +4,7 @@
 
 from math import sqrt
 
+import config
 import numpy as np
 import tensorflow as tf
 from numpy import (arange, argmax, sum)
@@ -13,7 +14,7 @@ from six.moves import cPickle as pickle
 
 
 class TrainingHelper:
-    def __init__(self, each_object_size_width=28, each_object_size_height=28):
+    def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH):
         """
         Constructor 
         """

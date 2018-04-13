@@ -2,7 +2,7 @@
 # Util class PickleMaker will convert objects under one folder
 # to a collection of 2-D collection, a 3-D collection will be.
 #
-
+import config
 from os import listdir as directory_list
 from os.path import isdir as is_dir
 from os.path import isfile as is_a_file
@@ -18,7 +18,7 @@ from six.moves import cPickle as pickle
 
 
 class PickleMaker:
-    def __init__(self, folder_with_objects_fullname_list, expected_objects_count, each_object_size_width = 28, each_object_size_height = 28,  pixel_depth = 255.0):
+    def __init__(self, folder_with_objects_fullname_list, expected_objects_count, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH,  pixel_depth=255.0):
         """
         Construct the PickleMaker that can convert objects under folders of
         folder_with_objects_fullname_list to a collection of 2-D, a 3-D collection.
@@ -37,88 +37,104 @@ class PickleMaker:
         Return None, False when some errors.
         """
         try:
-            print("► convert {} to pickle.".format(object_fullname), sep=' ',  end = "\r", flush = True)
-            dataset = (read_image(object_fullname).astype(float) - self.pixel_depth / 2) / self.pixel_depth
+            print("► convert {} to pickle.".format(
+                object_fullname), sep=' ',  end="\r", flush=True)
+            dataset = (read_image(object_fullname).astype(float) -
+                       self.pixel_depth / 2) / self.pixel_depth
             # Only the object with size-width-height equals to what we expected should
             # be as dataset to be persistented lately.
-            if dataset.shape == (self.each_object_size_width, self.each_object_size_height): 
-                print("✄ {}".format(object_fullname), sep=' ',  end = "\r", flush = True)
+            if dataset.shape == (self.each_object_size_width, self.each_object_size_height):
+                print("✄ {}".format(object_fullname),
+                      sep=' ',  end="\r", flush=True)
                 return dataset, True
             else:
-                print("☠ {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
+                print("☠ {} won't be used as training data.".format(
+                    object_fullname), sep=' ',  end="\r", flush=True)
                 return None, False
         except (IOError, ValueError) as ex:
-                print("☠ {} won't be used as training data.".format(object_fullname), sep=' ',  end = "\r", flush = True)
-                return None, False
+            print("☠ {} won't be used as training data.".format(
+                object_fullname), sep=' ',  end="\r", flush=True)
+            return None, False
 
     def __convert_objects_to_dataset__(self, folder_fullname):
         """
         Loop objects under folder_fullname and transfer them to 2-D with
         __from_object_to_dataset__. 
-        
+
         It'll save these 2-Ds to a 3-D collection which contains
 
         row: count of objects, 
         x: count of pixel of a object in  horizontal(width), 
         y: count of pixel of a object in vertical(height). 
-        
+
         Return a 3-D as final result collection, otherwise None, False.
         """
         print("► convert objects from {}.".format(folder_fullname))
         object_fullname_list = directory_list(folder_fullname)
-        return_dataset = ndarray(shape = (len(object_fullname_list), self.each_object_size_width, self.each_object_size_height), dtype = np.float32)
+        return_dataset = ndarray(shape=(len(
+            object_fullname_list), self.each_object_size_width, self.each_object_size_height), dtype=np.float32)
         count_converted = 0
         for obj in object_fullname_list:
             object_fullname = path_join(folder_fullname, obj)
-            object_dataset, res = self.__convert_object_to_dataset__(object_fullname)
+            object_dataset, res = self.__convert_object_to_dataset__(
+                object_fullname)
             if res:
                 return_dataset[count_converted, :, :] = object_dataset
                 count_converted += 1
-    
-        if count_converted >= self.expected_objects_count:    
-            print("✄ filter useful data {}/{}.".format(count_converted, len(return_dataset)))
-            return_dataset = return_dataset[:count_converted, :, :] # Optimizing, the return_dataset can't be used totally, the rest empty will be discared.
-            print("✅ full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape, dataset_mean(return_dataset), standard_deviation(return_dataset)))
+
+        if count_converted >= self.expected_objects_count:
+            print("✄ filter useful data {}/{}.".format(count_converted,
+                                                       len(return_dataset)))
+            # Optimizing, the return_dataset can't be used totally, the rest empty will be discared.
+            return_dataset = return_dataset[:count_converted, :, :]
+            print("✅ full-tensor: {}, mean: {}, std.deviation: {}".format(return_dataset.shape,
+                                                                          dataset_mean(return_dataset), standard_deviation(return_dataset)))
             return return_dataset, True
         else:
-            print("☠  varlidated data is too less, expected: {}, real: {}",  self.expected_objects_count, count_converted)
+            print("☠  varlidated data is too less, expected: {}, real: {}",
+                  self.expected_objects_count, count_converted)
             return None, False
 
-    def make(self, force = False):
+    def make(self, force=False):
         """
         Make pickle files to persist dataset(arrays) from objects under folder_with_objects_fullname_list.
         Return list of output fullname.
         """
         output_fullname_list = []
         for folder_fullname in self.folder_with_objects_fullname_list:
-             if is_dir(folder_fullname):
+            if is_dir(folder_fullname):
                 output_fullname = "{}.pickle".format(folder_fullname)
                 output_fullname_list.append(output_fullname)
                 if is_a_file(output_fullname) and not force:
-                    print("👍 {} already existed.".format(output_fullname)) 
+                    print("👍 {} already existed.".format(output_fullname))
                 else:
-                    dataset, res = self.__convert_objects_to_dataset__(folder_fullname)
+                    dataset, res = self.__convert_objects_to_dataset__(
+                        folder_fullname)
                     if res:
                         try:
                             with open(output_fullname, "wb") as write_file:
-                                print("► convert from {} to {}".format(folder_fullname, output_fullname))
-                                pickle.dump(dataset, write_file, pickle.HIGHEST_PROTOCOL)
+                                print("► convert from {} to {}".format(
+                                    folder_fullname, output_fullname))
+                                pickle.dump(dataset, write_file,
+                                            pickle.HIGHEST_PROTOCOL)
                                 print("👍 finished.")
                         except Exception as ex:
-                            print("☠ error while saving data to {}\ncased by: \n\n{}".format(output_fullname, ex))
+                            print("☠ error while saving data to {}\ncased by: \n\n{}".format(
+                                output_fullname, ex))
 
         return output_fullname_list
 
 
- 
 """
 Compress all to pickles
 """
+
+
 def compress_original_classes_to_pickle(src_root, expected_count):
     """
     src_root contains all prepared objects under their folders.
     expected_count for expect output after convert.
-    
+
     Return list of class directories like "src_root/A", "src_root/B".....
     """
     li = directory_list(src_root)
@@ -126,7 +142,7 @@ def compress_original_classes_to_pickle(src_root, expected_count):
 
     for input_data_name in li:
         input_objects.append(path_join(src_root, input_data_name))
-        
+
     # input_objects contains: "src_root/A", "src_root/B".....
     maker = PickleMaker(input_objects, expected_count)
     maker.make()

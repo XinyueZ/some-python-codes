@@ -1,7 +1,7 @@
 #
 # Util class for prune pickle results.
 #
-
+import config
 from os import listdir as directory_list
 from os import stat as stat_info
 from os.path import isdir as is_dir
@@ -14,11 +14,11 @@ from numpy.random import permutation as shuffle_all_and_copy
 from numpy.random import shuffle as shuffle_all
 
 from six.moves import cPickle as pickle
-from training_helper import TrainingHelper
+from tf_training_helper import TrainingHelper
 
 
 class PicklePrune:
-    def __init__(self, pickle_fullname_list, train_size, valid_size = 0, each_object_size_width = 28, each_object_size_height = 28):
+    def __init__(self, pickle_fullname_list, train_size, valid_size=0, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_WIDTH):
         """
         Merge and prune the training data as needed. Depending on your computer setup, you might not be able to fit it all in memory, and you can tune train_size as needed. The labels will be stored into a separate array of integers 0 through 9. Also create a validation dataset for hyperparameter tuning.
         """
@@ -36,7 +36,7 @@ class PicklePrune:
         return arrays if rows >= 0 otherwise all Nones.
         """
         if rows:
-            return  ndarray((rows,  self.each_object_size_width, self.each_object_size_height), dtype=np.float32), ndarray(rows, dtype=np.int32)
+            return ndarray((rows,  self.each_object_size_width, self.each_object_size_height), dtype=np.float32), ndarray(rows, dtype=np.int32)
         else:
             return None, None
 
@@ -47,7 +47,7 @@ class PicklePrune:
         permutation = shuffle_all_and_copy(labels.shape[0])
         return dataset[permutation, :, :], labels[permutation]
 
-    def prune(self, randomize = False):
+    def prune(self, randomize=False):
         """
         Prune ".pickle" to memory. It will revert data in .pickle(see pickle.maker.py).
         """
@@ -55,10 +55,12 @@ class PicklePrune:
         count_classes = len(self.pickle_fullname_list)
 
         # Get train's dataset and labels, it might be None, None when the self.train_size is 0.
-        train_dataset, train_labels = self.__create_dataset_labels__(self.train_size)
+        train_dataset, train_labels = self.__create_dataset_labels__(
+            self.train_size)
 
         # Get valid's dataset and labels, it might be None, None when the self.valid_size is 0.
-        valid_dataset, valid_labels = self.__create_dataset_labels__(self.valid_size)
+        valid_dataset, valid_labels = self.__create_dataset_labels__(
+            self.valid_size)
 
         # Define batch. It defines how many items will be used per loop, see blow.
         train_batch_each_class = self.train_size // count_classes
@@ -72,19 +74,23 @@ class PicklePrune:
         end_train_plus_valid = train_batch_each_class + valid_batch_each_class
 
         for label, pickle_file in enumerate(self.pickle_fullname_list):
-            print("► label:{}".format(label), sep=' ',  end = "\r", flush = True)
+            print("► label:{}".format(label), sep=' ',  end="\r", flush=True)
             try:
                 with open(pickle_file, "rb") as in_file:
                     objects_set = pickle.load(in_file)
                     shuffle_all(objects_set)
 
-                    train_dataset[start_train:end_train, :, :] = objects_set[valid_batch_each_class:end_train_plus_valid, :, :] # TODO Need discuss ...
+                    # TODO Need discuss ...
+                    train_dataset[start_train:end_train, :,
+                                  :] = objects_set[valid_batch_each_class:end_train_plus_valid, :, :]
                     train_labels[start_train:end_train] = label
                     start_train += train_batch_each_class
                     end_train += train_batch_each_class
 
-                    if valid_dataset is not None: # Notice: If self.valid_size is 0, here is None for valid_dataset.
-                        valid_dataset[start_valid:end_valid, :, :] = objects_set[:valid_batch_each_class, :, :]
+                    # Notice: If self.valid_size is 0, here is None for valid_dataset.
+                    if valid_dataset is not None:
+                        valid_dataset[start_valid:end_valid, :,
+                                      :] = objects_set[:valid_batch_each_class, :, :]
                         valid_labels[start_valid:end_valid] = label
                         # start position moves with gap of batch. 0 ->
                         # end position moves with gap of batch. batch ->
@@ -95,16 +101,20 @@ class PicklePrune:
                 raise
 
         if randomize:
-            train_dataset, train_labels = self.__randomize__(train_dataset, train_labels)
+            train_dataset, train_labels = self.__randomize__(
+                train_dataset, train_labels)
             if valid_dataset is not None:
-                valid_dataset, valid_labels = self.__randomize__(valid_dataset, valid_labels)
+                valid_dataset, valid_labels = self.__randomize__(
+                    valid_dataset, valid_labels)
 
         return train_dataset, train_labels, valid_dataset, valid_labels
-    
+
 
 """
 Make a summary pickle to total.pickle
 """
+
+
 def get_prune_pickles(src_root):
     """
     Return list of "xxx.pickle" under src_root.
@@ -122,16 +132,15 @@ def get_prune_pickles(src_root):
     return input_objects
 
 
-
 print("► try classes with pickles.")
 
 prune_pickles = get_prune_pickles("./notMNIST_large")
 pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
-train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune()
+train_dataset, train_labels, valid_dataset, valid_labels = pickle_prune.prune()
 
 prune_pickles = get_prune_pickles("./notMNIST_small")
 pickle_prune = PicklePrune(prune_pickles, 10000)
-test_dataset, test_labels, _, _  =  pickle_prune.prune()
+test_dataset, test_labels, _, _ = pickle_prune.prune()
 
 print("👍 ")
 print('Training:', train_dataset.shape, train_labels.shape)
@@ -141,11 +150,12 @@ print('Testing:', test_dataset.shape, test_labels.shape)
 print("► randomize.")
 prune_pickles = get_prune_pickles("./notMNIST_large")
 pickle_prune = PicklePrune(prune_pickles, 200000, 10000)
-train_dataset, train_labels, valid_dataset, valid_labels =  pickle_prune.prune(True)
+train_dataset, train_labels, valid_dataset, valid_labels = pickle_prune.prune(
+    True)
 
 prune_pickles = get_prune_pickles("./notMNIST_small")
 pickle_prune = PicklePrune(prune_pickles, 10000)
-test_dataset, test_labels, _, _  =  pickle_prune.prune(True)
+test_dataset, test_labels, _, _ = pickle_prune.prune(True)
 
 print("👍 ")
 print('Training:', train_dataset.shape, train_labels.shape)
@@ -153,18 +163,17 @@ print('Validation:', valid_dataset.shape, valid_labels.shape)
 print('Testing:', test_dataset.shape, test_labels.shape)
 
 
-
 print("► save total.pickle.")
 training_helper = TrainingHelper()
 save_pickle = path_join(".", "totals.pickle")
 data_to_save = {
-        "train_dataset": train_dataset,
-        "train_labels": train_labels,
-        "valid_dataset": valid_dataset,
-        "valid_labels": valid_labels,
-        "test_dataset": test_dataset,
-        "test_labels": test_labels
-    }
+    "train_dataset": train_dataset,
+    "train_labels": train_labels,
+    "valid_dataset": valid_dataset,
+    "valid_labels": valid_labels,
+    "test_dataset": test_dataset,
+    "test_labels": test_labels
+}
 training_helper.save_pickle(save_pickle, data_to_save)
 info = stat_info(save_pickle)
 print("👍 compressed pickle size: {}".format(info.st_size))
@@ -173,9 +182,12 @@ print("👍 compressed pickle size: {}".format(info.st_size))
 # For evaluation, use all from memory directly.
 
 print("► reformat total.pickle.")
-train_dataset, train_labels = training_helper.flat_dataset_labels(train_dataset, train_labels, 10)
-valid_dataset, valid_labels = training_helper.flat_dataset_labels(valid_dataset, valid_labels, 10)
-test_dataset, test_labels = training_helper.flat_dataset_labels(test_dataset, test_labels, 10)
+train_dataset, train_labels = training_helper.flat_dataset_labels(
+    train_dataset, train_labels, 10)
+valid_dataset, valid_labels = training_helper.flat_dataset_labels(
+    valid_dataset, valid_labels, 10)
+test_dataset, test_labels = training_helper.flat_dataset_labels(
+    test_dataset, test_labels, 10)
 
 print("👍 ")
 print('Training:', train_dataset.shape, train_labels.shape)
