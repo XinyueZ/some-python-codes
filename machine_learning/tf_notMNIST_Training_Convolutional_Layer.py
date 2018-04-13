@@ -1,5 +1,5 @@
 #
-# Run NN, multinomial logistic regression using simple gradient descent.
+# Run NN, implementation of convolutional traning.
 #
 import config
 import numpy as np

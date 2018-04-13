@@ -37,16 +37,16 @@ I keep these code as simple as possible to catch and easy to understand for furt
 - [PicklePrune, used for deserializing object, i.e. from binary to image](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/pickle_prune.py).
 
 
-## Build Neural Network
-A prediction about alphabet classification from
-A to J. Official sample let begginers in sleep, this sample is easy.
+## Build Neural Network for classical nonMNIST.
+A prediction about alphabet classification from "A" to "J". Official sample of [Tensorflow](https://www.tensorflow.org/) may let begginers in sleep, this implementation is easy. It is my own implementation is a little OOP which can bring some reusable codes for this clasical traning-case. 
 
- 
+Have fun.
 
 - [Multinomial logistic regression using simple gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Gradient_Descent.py).
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).
 - [NN, one RELU layer](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Relu_Layer_Gradient_Descent).
 - [NN, multiple RELU layer(see. TOTAL_HIDDEN_LAYERS in tf_notMNIST_full_nn_connect.py)](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Multi_Relu_Layer_Gradient_Descent.py).
+- [NN, implementation of convolutional traning](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/machine_learning/tf_notMNIST_Training_Convolutional_Layer.py).
 - [Make connection for the network work](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_full_nn_connect.py).
 
 ```python3 tf_notMNIST_full_nn_connect.py``` you will see training results.

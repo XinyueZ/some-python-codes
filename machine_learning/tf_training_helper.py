@@ -17,7 +17,7 @@ from six.moves import cPickle as pickle
 class TrainingHelper:
     def __init__(self, each_object_size_width=config.TRAIN_OBJECT_WIDTH, each_object_size_height=config.TRAIN_OBJECT_HEIGHT, channel=1):
         """
-        Constructor 
+        Constructor
         """
         self.each_object_size_width = each_object_size_width
         self.each_object_size_height = each_object_size_height
@@ -78,7 +78,7 @@ class TrainingHelper:
 
         If: there're 2 types of image:
 
-        y = np.array([0, #For 1. image type 
+        y = np.array([0, #For 1. image type
                       1, #For 2. image type
                       1])#For 3. image type
         run (np.arange(2)==y[:, None]).astype(np.float32)
@@ -90,7 +90,7 @@ class TrainingHelper:
 
         If: there're 3 types of image:
 
-        y = np.array([0, #For 1. image type 
+        y = np.array([0, #For 1. image type
                       1, #For 2. image type
                       2])#For 3. image type
         run (np.arange(3)==y[:, None]).astype(np.float32)
@@ -129,16 +129,15 @@ class TrainingHelper:
 
         shape = hidden.get_shape().as_list()
         _reshape_ = reshape(hidden, [shape[0], shape[1]*shape[2]*shape[3]])
-        hidden = tf.nn.relu(
-            matmul(_reshape_, layer_3["weights"]) + layer_3["biases"])
 
-        return matmul(hidden, layer_4["weights"]) + layer_4["biases"]
+        hidden = tf.nn.relu(self.activation(_reshape_, layer_3["weights"], layer_3["biases"])
+        return self.activation(hidden, layer_4["weights"], layer_4["biases"])
 
     def RELU_activation(self, activation, dropout_prob=None):
         """
         RELU layer.
         """
-        relu_layer = tf.nn.relu(activation)
+        relu_layer=tf.nn.relu(activation)
         if dropout_prob is not None:
             return tf.nn.dropout(relu_layer, dropout_prob)
         return relu_layer
@@ -147,23 +146,23 @@ class TrainingHelper:
         """
         Return loss and optimizer functions.
         """
-        loss = reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
+        loss=reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
             labels=y, logits=activation))
 
-        holder = weights.pop()
-        reg = tf.nn.l2_loss(holder)
+        holder=weights.pop()
+        reg=tf.nn.l2_loss(holder)
         # Loss function using L2 Regularization
         for w in weights:
             reg += tf.nn.l2_loss(w)
         weights.append(holder)
 
-        loss = reduce_mean(loss + beta * reg)
-        optimizer = None
+        loss=reduce_mean(loss + beta * reg)
+        optimizer=None
         if train_steps is None:
-            optimizer = tf.train.GradientDescentOptimizer(
+            optimizer=tf.train.GradientDescentOptimizer(
                 train_learning_rate).minimize(loss)
         else:
-            optimizer = tf.train.GradientDescentOptimizer(
+            optimizer=tf.train.GradientDescentOptimizer(
                 train_learning_rate).minimize(loss, global_step=train_steps)
         return loss, optimizer
 
@@ -173,9 +172,9 @@ class TrainingHelper:
 
         Count of nodes on current layer depends on the count of previous layer.
         """
-        weights = Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
+        weights=Variable(truncated_normal(shape=[former_count_hide_layer, current_count_hide_layer],
                                             stddev=sqrt(2.0/former_count_hide_layer)))
-        biases = Variable(zeros([current_count_hide_layer]))
+        biases=Variable(zeros([current_count_hide_layer]))
         return weights, biases
 
     def create_exponential_rate(self, start_learning_rate, training_train_steps):
