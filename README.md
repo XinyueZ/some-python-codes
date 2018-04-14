@@ -51,6 +51,15 @@ Have fun.
 
 ```python3 tf_notMNIST_full_nn_connect.py``` you will see training results.
 
+## scikit-learn
+
+It's also the subject of machine learning, but it's easy to make predictions using a tool called [scikit-learn](http://scikit-learn.org/), normally called sklearn, which can be a powerful tool for understanding and learning machine learning on a daily basis.
+
+Have fun.
+
+- [Hello,world with sklearn. Use-case description is in code.](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/sklearn_hello_world.py)
+
+
 
 # License
 
