@@ -31,10 +31,10 @@ def predict(predicted):
     )
 
 
-predict([[156, 2, 7]])
+predict([[156, 2, 7]]) # apple 1
 
-predict([[146, 1, 7]])
+predict([[146, 1, 7]]) # orange 0
 
-predict([[190, 12, 3]])
+predict([[190, 12, 3]]) # orange 0
 
-predict([[123, 5, 2]])
+predict([[123, 5, 2]]) # apple 1
