@@ -74,8 +74,19 @@ def predict(predicted):
     predicted_label = decision_tree_classifier.predict([predicted])
     print(
         "Predict: {} -> {}/{}".format(predicted,
-                                       predicted_label[0], iris_dataset.target_names[predicted_label[0]]))
+                                      predicted_label[0], iris_dataset.target_names[predicted_label[0]]))
 
 
 for test_object in test_data:
     predict(test_object)
+
+#
+# To compute accuracy of predication.
+#
+
+
+from sklearn.metrics import accuracy_score
+predication_labels = decision_tree_classifier.predict(test_data)
+print("Predict: {}".format(predication_labels))
+accuracy = accuracy_score(test_labels, predication_labels)
+print("Accuracy of predication: {:.4}%".format(accuracy * 100))
