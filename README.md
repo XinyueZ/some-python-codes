@@ -62,6 +62,7 @@ Have fun.
 
 - [Hello,world with sklearn. Use-case description is in code.](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/sklearn_hello_world.py)
 - [Iris problem. Train a model with train-data, predict test-data which train-data doesn't know.](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/sklearn_iris.py)
+- [Use iris dataset building a customized classifier, MyClassifier](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/sklearn_iris_my_classifier.py)
 
 
 # License
