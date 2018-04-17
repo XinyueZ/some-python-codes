@@ -75,12 +75,6 @@ class TF_notMNIST_Training_Premade_Estimator:
                 data_batch_size),
             steps=self.train_steps)
 
-        # print("♻️ evaluate ...")
-        # eval_result = classifier.evaluate(
-        #     input_fn=lambda: self.__eval_input_fn__(test_dataset, test_labels, data_batch_size))
-
-        # print('👍 Test set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
-
         # Predict test-data.
         print("♻️ predict ...")
         predictions = classifier.predict(
@@ -91,10 +85,17 @@ class TF_notMNIST_Training_Premade_Estimator:
 
         
         for pred_dict in predictions:
-            template = ("class type:{:<10} {:^} {:>10.2f}%")
+            template = ("class type:{:<10}{:^}{:>5.2f}%")
             class_id = pred_dict['class_ids'][0]
             probability = pred_dict['probabilities'][class_id]
             print(template.format(
                 class_id,
                 "->",
                 100 * probability))
+        print("👍")
+
+        print("♻️ evaluate ...")
+        eval_result = classifier.evaluate(
+            input_fn=lambda: self.__eval_input_fn__(tf_test_data, tf_test_labels, data_batch_size))
+
+        print('👍 Test set accuracy: {accuracy:0.3f}\n'.format(**eval_result))
