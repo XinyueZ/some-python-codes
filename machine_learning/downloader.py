@@ -6,6 +6,8 @@ import sys
 from os import stat
 from os.path import exists as path_exists
 from os.path import join as path_join
+from os.path import isdir as is_dir
+from os import makedirs as mkdir
 from urllib.request import urlopen as open_url
 
 from six.moves.urllib.request import urlretrieve
@@ -20,6 +22,8 @@ class Downloader:
         self.url = src_url
         self.last_percent = None
         self.data_root = saved_data_root
+        if not is_dir(saved_data_root):
+            mkdir(saved_data_root)
 
     def __progress__(self, count, block_size, total_size):
         """
