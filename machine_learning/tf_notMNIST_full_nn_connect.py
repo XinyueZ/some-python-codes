@@ -17,7 +17,7 @@ from tf_notMNIST_Training_Stochastic_Gradient_Descent import \
     TF_notMNIST_Training_Stochastic_Gradient_Descent
 from tf_notMNIST_Training_Convolutional_Layer import TF_notMNIST_Training_Convolutional_Layer
 from tf_training_helper import TrainingHelper
-
+from tf_notMNIST_Training_Premade_Estimator import TF_notMNIST_Training_Premade_Estimator
 
 TRAIN_BATCH = 10000
 TRAIN_STEPS = 1500
@@ -26,6 +26,29 @@ HIDE_LAYER = 1024  # Nodes on hidden-layout
 TOTAL_HIDDEN_LAYERS = 5  # How many hidden-layers.
 
 training_helper = TrainingHelper()
+
+print("► reformat total.pickle for Premade Estimator.")
+train_dataset, train_labels = training_helper.flat_dataset_labels(
+    pickle_prune.train_dataset,
+    pickle_prune.train_labels,
+    config.CLASSES_TO_TRAIN)
+valid_dataset, valid_labels = training_helper.flat_dataset_labels(
+    pickle_prune.valid_dataset,
+    pickle_prune.valid_labels,
+    config.CLASSES_TO_TRAIN)
+test_dataset, test_labels = training_helper.flat_dataset_labels(
+    pickle_prune.test_dataset,
+    pickle_prune.test_labels,
+    config.CLASSES_TO_TRAIN)
+
+TF_notMNIST_Training_Premade_Estimator(TRAIN_STEPS).start_with(train_dataset,
+                                                        pickle_prune.train_labels, # Don't use one-hot, https://codeburst.io/use-tensorflow-dnnclassifier-estimator-to-classify-mnist-dataset-a7222bf9f940
+                                                        test_dataset,
+                                                        pickle_prune.test_labels,
+                                                        HIDE_LAYER,
+                                                        TOTAL_HIDDEN_LAYERS,
+                                                        config.CLASSES_TO_TRAIN)
+
 
 print("► reformat total.pickle for Convolutional.")
 train_dataset, train_labels = training_helper.flat_dataset_labels_with_channels(
