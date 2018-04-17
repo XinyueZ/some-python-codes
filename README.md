@@ -42,6 +42,7 @@ A prediction about alphabet classification from "A" to "J". Official sample of [
 
 Have fun.
 
+- [Premade Estimator solution](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Premade_Estimator.py)
 - [Multinomial logistic regression using simple gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Gradient_Descent.py).
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).
 - [NN, one RELU layer](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Relu_Layer_Gradient_Descent).
@@ -54,6 +55,8 @@ Have fun.
 ## scikit-learn
 
 It's also the subject of machine learning, but it's easy to make predictions using a tool called [scikit-learn](http://scikit-learn.org/), normally called sklearn, which can be a powerful tool for understanding and learning machine learning on a daily basis.
+
+Like [Premade Estimator solution](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Premade_Estimator.py), here I use trained model to finish jobs.
 
 Have fun.
 
