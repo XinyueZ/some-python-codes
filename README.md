@@ -52,6 +52,8 @@ Have fun.
 
 ```python3 tf_notMNIST_full_nn_connect.py``` you will see training results.
 
+- [Iris solved by tensorflow](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_iris.py)
+
 ## scikit-learn
 
 It's also the subject of machine learning, but it's easy to make predictions using a tool called [scikit-learn](http://scikit-learn.org/), normally called sklearn, which can be a powerful tool for understanding and learning machine learning on a daily basis.
