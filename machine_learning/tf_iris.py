@@ -1,7 +1,7 @@
 #
 # In this example, I use the official data from the Iris flower classification:
 # Https://en.wikipedia.org/wiki/Iris_(plant)
-# The Sklearn provides an official source of data that should be integrated with Wikipedia.
+# This version is tensorflow solution which provides an official source of data that should be integrated with Wikipedia.
 # This sample will first list the "features" and the "labels" that will be classified as "classification",
 # which is the iris of what species it belongs to.
 #
