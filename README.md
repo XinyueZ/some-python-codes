@@ -42,7 +42,9 @@ A prediction about alphabet classification from "A" to "J". Official sample of [
 
 Have fun.
 - [CSV->Train->Predict](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_read_csv.py)
+	- Increase STEPS to obtain higher accuracy.
 - [CSV->Custom Model->Train->Predict](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_read_csv_custom_estimator.py)
+	- Increase STEPS & LAYERS to obtain higher accuracy.
 - [Premade Estimator solution](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Premade_Estimator.py)
 - [Multinomial logistic regression using simple gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Gradient_Descent.py).
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).

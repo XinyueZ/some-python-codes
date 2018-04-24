@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelBinarizer
 
-LAYERS = [50, 50, 50, 50]
+LAYERS = [50, 50, 50, 50, 50]
 STEPS = 50000
 
 
@@ -155,9 +155,9 @@ print(SEP)
 print("👉 predict")
 
 test_width_cols = np.array(
-    [10, 4,  6, 2, 11], dtype=np.int32)
+    [10, 4,  6, 2, 11, 1], dtype=np.int32)
 test_height_cols = np.array(
-    [23, 56,  66, 50, 25], dtype=np.int32)
+    [23, 56,  66, 50, 25, 1], dtype=np.int32)
 predict_input_fn = tf.estimator.inputs.numpy_input_fn(
     x={"Width": test_width_cols, "Height": test_height_cols},
     shuffle=False)
