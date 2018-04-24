@@ -11,6 +11,9 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelBinarizer
 
+LAYERS = [50, 50, 50, 50]
+STEPS = 50000
+
 
 def custom_model(features, labels, mode, params):
     """DNN with three hidden layers, and dropout of 0.1 probability."""
@@ -59,6 +62,8 @@ SEP = "=" * 140
 
 dataframe = pd.read_csv(FILE, dtype={
     'Name': str, 'Width': int, "Height": int})
+
+_labels_ = ["a", "b", "c"]
 
 # Get CSV content
 print(SEP)
@@ -134,10 +139,10 @@ model = tf.estimator.Estimator(
     model_fn=custom_model,
     params={
         'feature_columns': feature_cols,
-        'hidden_units': [50, 50, 50, 50],
+        'hidden_units': LAYERS,
         'n_classes': 3,
     })
-model.train(steps=50000, input_fn=lambda: _input_data_(dataframe, labels))
+model.train(steps=STEPS, input_fn=lambda: _input_data_(dataframe, labels))
 
 print(SEP)
 print("👉 evaluate")
@@ -160,6 +165,7 @@ predict_input_fn = tf.estimator.inputs.numpy_input_fn(
 predict_res = list(
     model.predict(input_fn=predict_input_fn))
 
+
 for res in predict_res:
     print(
-        "🙏  Probability：{:<5.2f} -> {}".format(max(res["probabilities"]),  res["classes"][0]))
+        "🙏  Probability：{:<5.2f} -> {}".format(max(res["probabilities"]),  _labels_[res["classes"][0]]))

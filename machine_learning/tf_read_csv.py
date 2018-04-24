@@ -7,6 +7,9 @@
 import tensorflow as tf
 import pandas as pd
 
+
+STEPS = 50000
+
 FILE = "data.csv"
 SEP = "=" * 140
 
@@ -86,7 +89,7 @@ model.train(steps=2000, input_fn=lambda: _input_data_(dataframe, labels))
 print(SEP)
 print("👉 evaluate")
 evaluate = model.evaluate(
-    steps=50, input_fn=lambda: _input_data_(dataframe, labels))
+    steps=STEPS, input_fn=lambda: _input_data_(dataframe, labels))
 print(evaluate)
 
 
