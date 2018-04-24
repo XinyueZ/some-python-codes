@@ -41,7 +41,7 @@ I keep these code as simple as possible to catch and easy to understand for furt
 A prediction about alphabet classification from "A" to "J". Official sample of [Tensorflow](https://www.tensorflow.org/) may let begginers in sleep, this implementation is easy. It's my own implementation with a little OOP which can bring some reusable codes for this classical training-case. 
 
 Have fun.
-
+- [CSV->Train->Predict](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_read_csv.py)
 - [Premade Estimator solution](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Premade_Estimator.py)
 - [Multinomial logistic regression using simple gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Gradient_Descent.py).
 - [Multinomial logistic regression using stochastic gradient descent](https://github.com/XinyueZ/some-python-codes/tree/master/machine_learning/tf_notMNIST_Training_Stochastic_Gradient_Descent.py).
