@@ -115,9 +115,9 @@ print("👉 Shuffle TensorSliceDataset: data-count: {}".format(sample_count))
 dataset = dataset.shuffle(sample_count + 1).repeat().batch(2)
 print(dataset)
 
-# One-shot
+# One-hot
 print(SEP)
-print("👉 One-shot")
+print("👉 One-hot")
 train_features, train_labels = dataset.make_one_shot_iterator().get_next()
 print((train_features, train_labels))
 
