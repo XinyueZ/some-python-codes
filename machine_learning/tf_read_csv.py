@@ -6,7 +6,9 @@
 #
 import tensorflow as tf
 import pandas as pd
-
+from tensorflow import keras
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 STEPS = 50000
 
@@ -20,13 +22,46 @@ dataframe = pd.read_csv(FILE, dtype={
 print(SEP)
 print(dataframe)
 
-
 # Get labels
 print(SEP)
 print("👉 Pop labels")
 labels = dataframe.pop("Name")
+
+# Make feature list, remove duplicates and keep order.
+_labels_ = list()
+fn = lambda: [x for x in labels if not (x in _labels_ or _labels_.append(x))]
+fn()
+print(_labels_)
+
 print(labels)
 print(type(labels))
+
+# Use sklearn utility to convert label strings to numbered index.
+print(SEP)
+print("👉 Use sklearn utility to convert label strings to numbered index")
+
+encoder = LabelEncoder()
+label_nums = encoder.fit_transform(labels)
+print(label_nums)
+
+# Convert to one-hot standard.
+print("👉 Convert labels into one-hot standard")
+one_hot_labels = keras.utils.to_categorical(label_nums, np.max(label_nums) + 1)
+print(one_hot_labels)
+
+# Use tf.keras.preprocessing.text to convert label strings to numbered index.
+print("👉 Use tf.keras.preprocessing.text to convert label strings to numbered index.")
+print("{} -> {}".format(" ".join(labels), keras.preprocessing.text.one_hot(" ".join(labels), 26)))
+
+# Word processing
+print("👉 Word processing")
+tokenize = keras.preprocessing.text.Tokenizer(num_words=100, char_level=False)
+tokenize.fit_on_texts(labels)
+print("- indexing...")
+print(tokenize.texts_to_sequences(labels))
+print(keras.preprocessing.sequence.pad_sequences(tokenize.texts_to_sequences(labels)))
+print("- matrix and one-hot...")
+print(tokenize.texts_to_matrix(labels))
 
 print(SEP)
 print("👉 After popping labels")
@@ -62,7 +97,6 @@ print("👉 TensorSliceDataset")
 dataset = tf.data.Dataset.from_tensor_slices((dict_dataframe, labels))
 print(dataset)
 
-
 # shuffle
 print(SEP)
 sample_count = dataframe.shape[0]
@@ -70,22 +104,23 @@ print("👉 Shuffle TensorSliceDataset: data-count: {}".format(sample_count))
 dataset = dataset.shuffle(sample_count + 1).repeat().batch(2)
 print(dataset)
 
-# One-hot
+# Iterator
 print(SEP)
-print("👉 One-hot")
+print("👉 Iterator")
 train_features, train_labels = dataset.make_one_shot_iterator().get_next()
 print((train_features, train_labels))
 
 
 # Train example and predict
-import numpy as np
-
 
 def _input_data_(dataframe, labels):
-    dataset = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
-    sample_count = dataframe.shape[0]
-    dataset = dataset.shuffle(sample_count + 1).repeat().batch(2)
-    return dataset.make_one_shot_iterator().get_next()
+    def __input_fn__():
+        dataset = tf.data.Dataset.from_tensor_slices((dict(dataframe), labels))
+        sample_count = dataframe.shape[0]
+        dataset = dataset.shuffle(sample_count + 1).repeat().batch(2)
+        return dataset.make_one_shot_iterator().get_next()
+
+    return __input_fn__
 
 
 def train_and_predict():
@@ -94,12 +129,13 @@ def train_and_predict():
         tf.feature_column.numeric_column("Height")
     ]
     model = tf.estimator.LinearClassifier(
-        feature_cols, n_classes=3, label_vocabulary=["a", "b", "c"])
-    model.train(steps=2000, input_fn=lambda: _input_data_(dataframe, labels))
+        feature_cols, n_classes=np.max(label_nums) + 1,
+        label_vocabulary=_labels_)
+    model.train(steps=2000, input_fn=_input_data_(dataframe, labels))
     print(SEP)
     print("👉 evaluate")
     evaluate = model.evaluate(
-        steps=STEPS, input_fn=lambda: _input_data_(dataframe, labels))
+        steps=STEPS, input_fn=_input_data_(dataframe, labels))
     print(evaluate)
     print(SEP)
     print("👉 predict")
@@ -117,5 +153,5 @@ def train_and_predict():
             "🙏  Probability：{:<5.2f} -> {}".format(max(res["probabilities"]), res["classes"][0]))
 
 
-train_and_predict()
-
+if __name__ == '__main__':
+    train_and_predict()
