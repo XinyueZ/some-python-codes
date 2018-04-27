@@ -32,6 +32,17 @@ print(SEP)
 print("👉 After popping labels")
 print(dataframe)
 
+# Try drop function to remove useless columns.
+print(SEP)
+dataframe = dataframe[pd.notnull(dataframe['Length'])]
+print("👉 find 'Length': ")
+print(dataframe)
+dataframe = dataframe[pd.notnull(dataframe['Dense'])]
+print("👉 find 'Dense': ")
+print(dataframe)
+dataframe = dataframe.drop(["Length", "Dense"], axis=1)
+print("👉 Use drop()")
+print(dataframe)
 
 # Convert columns to map.
 print(SEP)
@@ -59,9 +70,9 @@ print("👉 Shuffle TensorSliceDataset: data-count: {}".format(sample_count))
 dataset = dataset.shuffle(sample_count + 1).repeat().batch(2)
 print(dataset)
 
-# One-shot
+# One-hot
 print(SEP)
-print("👉 One-shot")
+print("👉 One-hot")
 train_features, train_labels = dataset.make_one_shot_iterator().get_next()
 print((train_features, train_labels))
 
@@ -77,37 +88,34 @@ def _input_data_(dataframe, labels):
     return dataset.make_one_shot_iterator().get_next()
 
 
-feature_cols = [
-    tf.feature_column.numeric_column("Width"),
-    tf.feature_column.numeric_column("Height")
-]
+def train_and_predict():
+    feature_cols = [
+        tf.feature_column.numeric_column("Width"),
+        tf.feature_column.numeric_column("Height")
+    ]
+    model = tf.estimator.LinearClassifier(
+        feature_cols, n_classes=3, label_vocabulary=["a", "b", "c"])
+    model.train(steps=2000, input_fn=lambda: _input_data_(dataframe, labels))
+    print(SEP)
+    print("👉 evaluate")
+    evaluate = model.evaluate(
+        steps=STEPS, input_fn=lambda: _input_data_(dataframe, labels))
+    print(evaluate)
+    print(SEP)
+    print("👉 predict")
+    test_width_cols = np.array(
+        [10, 4, 6, 2, 11], dtype=np.int32)
+    test_height_cols = np.array(
+        [23, 56, 66, 50, 25], dtype=np.int32)
+    predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+        x={"Width": test_width_cols, "Height": test_height_cols},
+        shuffle=False)
+    predict_res = list(
+        model.predict(input_fn=predict_input_fn))
+    for res in predict_res:
+        print(
+            "🙏  Probability：{:<5.2f} -> {}".format(max(res["probabilities"]), res["classes"][0]))
 
-model = tf.estimator.LinearClassifier(
-    feature_cols, n_classes=3, label_vocabulary=["a", "b", "c"])
-model.train(steps=2000, input_fn=lambda: _input_data_(dataframe, labels))
 
-print(SEP)
-print("👉 evaluate")
-evaluate = model.evaluate(
-    steps=STEPS, input_fn=lambda: _input_data_(dataframe, labels))
-print(evaluate)
-
-
-print(SEP)
-print("👉 predict")
-
-test_width_cols = np.array(
-    [10, 4,  6, 2, 11], dtype=np.int32)
-test_height_cols = np.array(
-    [23, 56,  66, 50, 25], dtype=np.int32)
-predict_input_fn = tf.estimator.inputs.numpy_input_fn(
-    x={"Width": test_width_cols, "Height": test_height_cols},
-    shuffle=False)
-
-predict_res = list(
-    model.predict(input_fn=predict_input_fn))
-
-for res in predict_res:
-    print(
-        "🙏  Probability：{:<5.2f} -> {}".format(max(res["probabilities"]),  res["classes"][0]))
+train_and_predict()
 

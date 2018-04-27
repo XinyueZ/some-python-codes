@@ -77,6 +77,18 @@ labels = dataframe.pop("Name")
 print(labels)
 print(type(labels))
 
+# Try drop function to remove useless columns.
+print(SEP)
+dataframe = dataframe[pd.notnull(dataframe['Length'])]
+print("👉 find 'Length': ")
+print(dataframe)
+dataframe = dataframe[pd.notnull(dataframe['Dense'])]
+print("👉 find 'Dense': ")
+print(dataframe)
+dataframe = dataframe.drop(["Length", "Dense"], axis=1)
+print("👉 Use drop()")
+print(dataframe)
+
 # Because label in strings might not be supported.
 # Convert label in strings to numbers.
 print("👉 To one-hot")
