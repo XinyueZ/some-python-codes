@@ -4,6 +4,7 @@ token
 username
 *.tar.gz
 *MNIST*
-.vs*
+.vscode
 *.pickle
+.idea
 
