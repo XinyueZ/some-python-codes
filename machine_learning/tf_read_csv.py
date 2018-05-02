@@ -49,7 +49,7 @@ def texts_to_matrix(lex, dataset):
     return np.array(feature_list)
 
 
-def texts_to_pad_sequences(lex, lines, padding_left=True, padding_right=False, padding_symbol=0):
+def texts_to_pad_sequences(lex, lines, padding_right=False, padding_left=False, padding_symbol=0):
     feature_list = []
     for line in lines:
         line_index = []
@@ -60,13 +60,32 @@ def texts_to_pad_sequences(lex, lines, padding_left=True, padding_right=False, p
         for word in words:
             line_index.append(lex.index(word) + 1)
 
-        pad_array = nltk.ngrams(line_index,
-                                n=len(lex) + 1,  # len(max(lines, key=len)),
-                                pad_left=padding_left,
-                                pad_right=padding_right,
-                                left_pad_symbol=padding_symbol)
-        pad_array_to_list = list(pad_array)
-        feature_list.append(pad_array_to_list[-1])
+        n = len(lex) + 1  # len(max(lines, key=len)),
+        if padding_right and not padding_left:
+            pad_array = nltk.ngrams(line_index,
+                                    n=n,  # len(max(lines, key=len)),
+                                    pad_right=True,
+                                    right_pad_symbol=padding_symbol)
+            pad_array_to_list = list(pad_array)
+            feature_list.append(pad_array_to_list[0])
+        elif padding_left and not padding_right:
+            pad_array = nltk.ngrams(line_index,
+                                    n=n,
+                                    pad_left=True,
+                                    left_pad_symbol=padding_symbol)
+            pad_array_to_list = list(pad_array)
+            feature_list.append(pad_array_to_list[-1])
+        elif padding_right and padding_left:
+            pad_array = nltk.ngrams(line_index,
+                                    n=n,
+                                    pad_right=True,
+                                    pad_left=True,
+                                    right_pad_symbol=padding_symbol,
+                                    left_pad_symbol=padding_symbol)
+            pad_array_to_list = list(pad_array)
+            feature_list.append(pad_array_to_list[-n // 2])
+        else:
+            feature_list.append(line_index)
     return np.array(feature_list)
 
 
@@ -124,7 +143,10 @@ lexicon = fit_on_texts(labels)
 print("- lexicon...")
 print(lexicon)
 print("- indexing...")
-print(texts_to_pad_sequences(lexicon, labels))
+print(texts_to_pad_sequences(lexicon, labels, padding_right=True))
+print(texts_to_pad_sequences(lexicon, labels, padding_left=True))
+print(texts_to_pad_sequences(lexicon, labels, padding_right=True, padding_left=True))
+print(texts_to_pad_sequences(lexicon, labels, padding_right=False, padding_left=False))
 print("- matrix...")
 print(texts_to_matrix(lexicon, labels))
 
