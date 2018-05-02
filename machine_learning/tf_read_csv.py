@@ -17,7 +17,7 @@ FILE = "data.csv"
 SEP = "=" * 140
 
 
-def create_lexicon(dataset):
+def fit_on_texts(dataset):
     lines = dataset.tolist()
     lex = []
     for line in lines:
@@ -26,10 +26,13 @@ def create_lexicon(dataset):
 
     lemmatizer = nltk.WordNetLemmatizer()
     lex = [lemmatizer.lemmatize(word) for word in lex]
-    return lex
+    _lex_ = list()
+    fn = lambda: [x for x in lex if not (x in _lex_ or _lex_.append(x))]
+    fn()
+    return _lex_
 
 
-def string_to_vector(lex, dataset):
+def texts_to_matrix(lex, dataset):
     feature_list = []
     lines = dataset.tolist()
     for line in lines:
@@ -37,12 +40,29 @@ def string_to_vector(lex, dataset):
         lemmatizer = nltk.WordNetLemmatizer()
         words = [lemmatizer.lemmatize(word) for word in words]
 
-        features = np.zeros(len(lex))
+        features = np.zeros(len(lex) + 1)
         for word in words:
             if word in lex:
-                features[lex.index(word)] = 1
+                features[lex.index(word) + 1] = 1
         feature_list.append(list(features))
     return np.array(feature_list)
+
+
+def texts_to_pad_sequences(lex, lines, n):
+    ll = []
+    for line in lines:
+        line_index = []
+        words = nltk.word_tokenize(line.lower())
+        lemmatizer = nltk.WordNetLemmatizer()
+        words = [lemmatizer.lemmatize(word) for word in words]
+        for word in words:
+            line_index.append(lex.index(word) + 1)
+
+        ll.append(list(nltk.ngrams(line_index,
+                                   n=n,
+                                   pad_left=True,
+                                   left_pad_symbol=0))[-1])
+    return np.array(ll)
 
 
 dataframe = pd.read_csv(FILE, dtype={
@@ -95,11 +115,13 @@ print(tokenize.texts_to_matrix(labels))
 
 # Word processing other ways
 print("👉 Word processing with nltk")
-lexicon = create_lexicon(labels)
+lexicon = fit_on_texts(labels)
 print("- lexicon...")
 print(lexicon)
+print("- indexing...")
+print(texts_to_pad_sequences(lexicon, labels, 3))
 print("- lexicon -> matrix...")
-print(string_to_vector(lexicon, labels))
+print(texts_to_matrix(lexicon, labels))
 
 print(SEP)
 print("👉 After popping labels")
