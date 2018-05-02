@@ -1,8 +1,12 @@
 import tensorflow as tf
+from tensorflow import keras
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import LabelBinarizer
+
+BATCH_SZ = 128
+STEPS = 10
+HIDDEN_UNITS = [500, 500, 500]
+CUT_DATA = .5
 
 
 def make_dataset(batch_sz, x, y=None, shuffle=False, shuffle_buffer_size=1000):
@@ -29,12 +33,9 @@ def main():
 
     # Clean data
     data = pd.read_csv(path)
-    # _CSV_COLUMN_DEFAULTS = [[""], [""], [""],
-    #                         [0.], [0.],
-    #                         [""], [""], [""], [""]]
-    # data = tf.decode_csv(data, record_defaults=_CSV_COLUMN_DEFAULTS)
-    data.head()
     data = data.dropna()
+    train_size = int(len(data) * CUT_DATA)
+    data = data[:train_size]
     data = data[pd.notnull(data["price"])]
 
     variety_threshold = 500  # Anything that occurs less than this will be removed.
@@ -58,41 +59,98 @@ def main():
     y_test = x_test.pop("price")
 
     # To get total classes of wine-varieties
+    from sklearn.preprocessing import LabelEncoder
     encoder = LabelEncoder()
-    variety_train = encoder.fit_transform(x_train["variety"])
-    num_classes = (np.max(variety_train) + 1).item()
-    print("Classes of variety: {}".format(num_classes))
+    x_variety_train = encoder.fit_transform(x_train["variety"])
+    num_classes = (np.max(x_variety_train) + 1).item()
+    print("Classes of variety for train: {}".format(num_classes))
+    x_variety_test = encoder.fit_transform(x_test["variety"])
+    print("Classes of variety for test: {}".format((np.max(x_variety_test) + 1).item()))
+
+    # Input wine-varieties
+    from sklearn.preprocessing import LabelBinarizer
+    encoder = LabelBinarizer()
+    x_variety_train = encoder.fit_transform(x_train["variety"])
+    x_variety_test = encoder.fit_transform(x_test["variety"])
+    # x_variety_train = keras.utils.to_categorical(x_variety_train, num_classes)
+    # x_variety_test = keras.utils.to_categorical(x_variety_test, num_classes)
+
+    # Input description
+    vocab_size = 12000
+    max_seq_length = 170
+    tokenize = keras.preprocessing.text.Tokenizer(num_words=vocab_size, char_level=False)
+    tokenize.fit_on_texts(x_train["description"])
+    x_bow_desc_train = tokenize.texts_to_matrix(x_train["description"])
+    x_bow_desc_test = tokenize.texts_to_matrix(x_test["description"])
+
+    x_seq_desc_train = tokenize.texts_to_sequences(x_train["description"])
+    x_seq_desc_test = tokenize.texts_to_sequences(x_test["description"])
+    x_seq_desc_train = keras.preprocessing.sequence.pad_sequences(
+        x_seq_desc_train, maxlen=max_seq_length, padding="post", dtype=np.int32)
+    x_seq_desc_test = keras.preprocessing.sequence.pad_sequences(
+        x_seq_desc_test, maxlen=max_seq_length, padding="post", dtype=np.int32)
+
+    x_train = pd.Series(
+        {
+            "variety": x_variety_train,
+            "description": x_bow_desc_train.astype(int),
+            "embed_description": x_seq_desc_train
+        })
+    print(x_train)
+    x_test = pd.Series(
+        {
+            "variety": x_variety_test,
+            "description": x_bow_desc_test.astype(int),
+            "embed_description": x_seq_desc_test
+        })
+    print(x_test)
 
     # Define feature-columns
-    vocab_size = 12000
-    embedding_dimension = vocab_size * 0.25
-    variety_categorical_column = tf.feature_column.categorical_column_with_hash_bucket(
-        'variety', hash_bucket_size=vocab_size)
-    description_categorical_column = tf.feature_column.categorical_column_with_hash_bucket(
-        'description', hash_bucket_size=vocab_size)
-    embedding_description_column = tf.feature_column.embedding_column(
-        categorical_column=description_categorical_column,
-        dimension=embedding_dimension)
+    variety_column = tf.feature_column.indicator_column(
+        tf.feature_column.categorical_column_with_identity(
+            "variety", num_classes
+        ))
 
-    wide_columns = tf.feature_column.indicator_column(
-        variety_categorical_column) + tf.feature_column.indicator_column(
-        description_categorical_column)
+    description_column = tf.feature_column.indicator_column(
+        tf.feature_column.categorical_column_with_identity(
+            "description", max_seq_length
+        ))
+
+    embedding_description_column = tf.feature_column.embedding_column(
+        categorical_column=tf.feature_column.categorical_column_with_hash_bucket(
+            key="embed_description",
+            hash_bucket_size=int((max_seq_length * vocab_size) ** 0.25),
+            dtype=tf.int32
+        ),
+        dimension=8)
+
+    wide_columns = [variety_column, description_column]
     deep_columns = [embedding_description_column]
 
     # Train model
-    hidden_units = [100, 75, 50, 25]
-    run_config = tf.estimator.RunConfig().replace(
-        session_config=tf.ConfigProto(device_count={'GPU': 0}))
+    run_config = tf.estimator.RunConfig(save_checkpoints_secs=1)
     model = tf.estimator.DNNLinearCombinedRegressor(
+        linear_optimizer="Adam",
+        dnn_optimizer="Adam",
         linear_feature_columns=wide_columns,
         dnn_feature_columns=deep_columns,
-        dnn_hidden_units=hidden_units,
-        config=run_config)
+        dnn_hidden_units=HIDDEN_UNITS,
+        config=run_config,
+        model_dir='models/wine_price')
 
+    tf.logging.set_verbosity(tf.logging.INFO)
+    print("🏃....")
     model.train(
-        steps=10,
-        input_fn=make_dataset(128, x_train, y_train,
+        steps=STEPS,
+        input_fn=make_dataset(BATCH_SZ, x_train, y_train,
                               shuffle=True))
+    print("🙏 ")
+    evaluate = model.evaluate(
+        steps=STEPS,
+        input_fn=make_dataset(BATCH_SZ, x_test, y_test,
+                              shuffle=False))
+    print("💪 ")
+    print(evaluate)
 
 
 if __name__ == '__main__':
