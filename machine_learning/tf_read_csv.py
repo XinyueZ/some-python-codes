@@ -44,25 +44,30 @@ def texts_to_matrix(lex, dataset):
         for word in words:
             if word in lex:
                 features[lex.index(word) + 1] = 1
+
         feature_list.append(list(features))
     return np.array(feature_list)
 
 
-def texts_to_pad_sequences(lex, lines, n):
-    ll = []
+def texts_to_pad_sequences(lex, lines, padding_left=True, padding_right=False, padding_symbol=0):
+    feature_list = []
     for line in lines:
         line_index = []
         words = nltk.word_tokenize(line.lower())
         lemmatizer = nltk.WordNetLemmatizer()
         words = [lemmatizer.lemmatize(word) for word in words]
+
         for word in words:
             line_index.append(lex.index(word) + 1)
 
-        ll.append(list(nltk.ngrams(line_index,
-                                   n=n,
-                                   pad_left=True,
-                                   left_pad_symbol=0))[-1])
-    return np.array(ll)
+        pad_array = nltk.ngrams(line_index,
+                                n=len(lex) + 1,
+                                pad_left=padding_left,
+                                pad_right=padding_right,
+                                left_pad_symbol=padding_symbol)
+        pad_array_to_list = list(pad_array)
+        feature_list.append(pad_array_to_list[-1])
+    return np.array(feature_list)
 
 
 dataframe = pd.read_csv(FILE, dtype={
@@ -110,7 +115,7 @@ tokenize.fit_on_texts(labels)
 print("- indexing...")
 print(tokenize.texts_to_sequences(labels))
 print(keras.preprocessing.sequence.pad_sequences(tokenize.texts_to_sequences(labels)))
-print("- matrix and one-hot...")
+print("- matrix...")
 print(tokenize.texts_to_matrix(labels))
 
 # Word processing other ways
@@ -119,7 +124,7 @@ lexicon = fit_on_texts(labels)
 print("- lexicon...")
 print(lexicon)
 print("- indexing...")
-print(texts_to_pad_sequences(lexicon, labels, 3))
+print(texts_to_pad_sequences(lexicon, labels))
 print("- lexicon -> matrix...")
 print(texts_to_matrix(lexicon, labels))
 
