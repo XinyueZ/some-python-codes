@@ -40,7 +40,7 @@ def texts_to_matrix(lex, dataset):
         lemmatizer = nltk.WordNetLemmatizer()
         words = [lemmatizer.lemmatize(word) for word in words]
 
-        features = np.zeros(len(max(lines, key=len)))
+        features = np.zeros(len(lex) + 1)  # (len(max(lines, key=len)))
         for word in words:
             if word in lex:
                 features[lex.index(word) + 1] = 1
@@ -61,7 +61,7 @@ def texts_to_pad_sequences(lex, lines, padding_left=True, padding_right=False, p
             line_index.append(lex.index(word) + 1)
 
         pad_array = nltk.ngrams(line_index,
-                                n=len(max(lines, key=len)),
+                                n=len(lex) + 1,  # len(max(lines, key=len)),
                                 pad_left=padding_left,
                                 pad_right=padding_right,
                                 left_pad_symbol=padding_symbol)
