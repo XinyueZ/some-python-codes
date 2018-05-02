@@ -9,11 +9,41 @@ import pandas as pd
 from tensorflow import keras
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import nltk
 
 STEPS = 50000
 
 FILE = "data.csv"
 SEP = "=" * 140
+
+
+def create_lexicon(dataset):
+    lines = dataset.tolist()
+    lex = []
+    for line in lines:
+        words = nltk.word_tokenize(line.lower())
+        lex += words
+
+    lemmatizer = nltk.WordNetLemmatizer()
+    lex = [lemmatizer.lemmatize(word) for word in lex]
+    return lex
+
+
+def string_to_vector(lex, dataset):
+    feature_list = []
+    lines = dataset.tolist()
+    for line in lines:
+        words = nltk.word_tokenize(line.lower())
+        lemmatizer = nltk.WordNetLemmatizer()
+        words = [lemmatizer.lemmatize(word) for word in words]
+
+        features = np.zeros(len(lex))
+        for word in words:
+            if word in lex:
+                features[lex.index(word)] = 1
+        feature_list.append(list(features))
+    return np.array(feature_list)
+
 
 dataframe = pd.read_csv(FILE, dtype={
     'Name': str, 'Width': int, "Height": int})
@@ -62,6 +92,14 @@ print(tokenize.texts_to_sequences(labels))
 print(keras.preprocessing.sequence.pad_sequences(tokenize.texts_to_sequences(labels)))
 print("- matrix and one-hot...")
 print(tokenize.texts_to_matrix(labels))
+
+# Word processing other ways
+print("👉 Word processing with nltk")
+lexicon = create_lexicon(labels)
+print("- lexicon...")
+print(lexicon)
+print("- lexicon -> matrix...")
+print(string_to_vector(lexicon, labels))
 
 print(SEP)
 print("👉 After popping labels")
