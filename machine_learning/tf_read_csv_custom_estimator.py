@@ -118,6 +118,8 @@ print(SEP)
 print("👉 dict_dataframe")
 dict_dataframe = dict(dataframe)
 print(dict_dataframe)
+print("👉 dict_dataframe.items()")
+print(dict_dataframe.items())
 
 print("👉 dict_dataframe[Width]")
 print(dict_dataframe["Width"])
