@@ -11,7 +11,7 @@ vm = subprocess.Popen(['vm_stat'], stdout=subprocess.PIPE).communicate()[0].deco
 
 # Iterate processes
 processLines = ps.split('\n')
-sep = re.compile('[\s]+')
+sep = re.compile(r'[\s]+')
 rssTotal = 0 # kB
 for row in range(1,len(processLines)):
     rowText = processLines[row].strip()
@@ -24,12 +24,12 @@ for row in range(1,len(processLines)):
 
 # Process vm_stat
 vmLines = vm.split('\n')
-sep = re.compile(':[\s]+')
+sep = re.compile(r':[\s]+')
 vmStats = {}
 for row in range(1,len(vmLines)-2):
     rowText = vmLines[row].strip()
     rowElements = sep.split(rowText)
-    vmStats[(rowElements[0])] = int(rowElements[1].strip('\.')) * 4096
+    vmStats[(rowElements[0])] = int(rowElements[1].strip(r'\.')) * 4096
 
 print('Wired Memory:\t\t%d MB' % ( vmStats["Pages wired down"]/1024/1024 ))
 print('Active Memory:\t\t%d MB' % ( vmStats["Pages active"]/1024/1024 ))
